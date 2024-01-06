@@ -1,13 +1,4 @@
 package com.heewoong.brewstar
-//import com.kakao.sdk.user.model.User
-//import android.view.View
-//import android.widget.ImageView
-//import android.widget.TextView
-//
-//import com.bumptech.glide.Glide
-//import com.bumptech.glide.RequestManager
-//import com.google.android.gms.common.internal.TelemetryLoggingClient
-//import com.kakao.sdk.user.model.User
 
 import android.content.Intent
 import android.os.Bundle
@@ -23,56 +14,25 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.Constants.TAG
 import com.kakao.sdk.user.UserApiClient
-//import kotlin.jvm.functions.Function1
-//import kotlin.jvm.functions.Function2
 
 
 class MainActivity : AppCompatActivity() {
 
-//    private lateinit var kakaoLoginButton: ImageButton
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-//
-//        kakaoLoginButton = findViewById(R.id.btnKakaoLogin)
-//        val context = this
-//        kakaoLoginButton.setOnClickListener {
-//            // 카카오 로그인 요청
-//            lifecycleScope.launch {
-//                try {
-//                    // 서비스 코드에서는 간단하게 로그인 요청하고 oAuthToken을 받아올 수 있다.
-//                    val oAuthToken = UserApiClient.loginWithKakao(context)
-//                    Log.d("MainActivity", "beanbean > $oAuthToken")
-//                } catch (error: Throwable) {
-//                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-//                        Log.d("MainActivity", "사용자가 명시적으로 취소")
-//                    } else {
-//                        Log.e("MainActivity", "인증 에러 발생", error)
-//                    }
-//                }
-//            }
-//        }
-
-
-
-
-
-
-
-     //새로운 사람 해보기
-
     private lateinit var binding : ActivityMainBinding
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater) // binding 만들기
         // R.layout.activity_main == binding.root 임
         setContentView(binding.root)
 
-        val keyHash = Utility.getKeyHash(this)
+        
+        val keyHash = Utility.getKeyHash(this) // hash key 선언
         Log.e("Hash", "keyHash: $keyHash")
         /** KakaoSDK init */
-        KakaoSdk.init(this, this.getString(R.string.kakao_native_app_key))
+        KakaoSdk.init(this, this.getString(R.string.kakao_native_app_key)) // 초기화, but 뭐하는건진 모르겠음
+        // 근데 이 초기화를 내 코드 상 GlobalApplication에서도 하는데, 두 개 중 어떤 게 진짜로 초기화 역할을 하는 건 진 모르겠음
+        // GlobalApplication을 없애도 잘 작동하는 걸로 봐서는, 여기서도 초기화 역할을 잘 해주는 듯
 
         binding.btnKakaoLogin.setOnClickListener {
             kakaoLogin()
@@ -98,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                     if(error != null) {
                         Log.e(TAG, "사용자 정보 요청 실패 $error")
                     } else if (user != null) {
-                        Log.e(TAG, "로그인 성공했냐? $user")
+                        Log.e(TAG, "로그인 성공했냐? $user") // 이 부분은 이미 로그인 정보가 담겨있어서 버튼을 누르면 다시 로그인이 되었을 때 뜸
                         val intent = Intent(this, kakaoLogin::class.java)
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                         finish()
@@ -147,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                 }
             } else if (token != null) {
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-                Log.e(TAG, "로그인 성공 ${token.accessToken}")
+                Log.e(TAG, "로그인 성공 ${token.accessToken}") // 이 부분은 이미 로그인 된 상황에서 뒤로가기 버튼 눌렀다가 다시 kakaoAccount로 continue했을 때 나타남
                 val intent = Intent(this, kakaoLogin::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
