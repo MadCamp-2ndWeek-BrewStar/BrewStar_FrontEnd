@@ -1,5 +1,7 @@
 package com.heewoong.brewstar
 
+import android.content.ContentValues
+import java.util.*
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -19,14 +21,14 @@ import com.kakao.sdk.user.UserApiClient
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater) // binding 만들기
         // R.layout.activity_main == binding.root 임
         setContentView(binding.root)
 
-        
+
         val keyHash = Utility.getKeyHash(this) // hash key 선언
         Log.e("Hash", "keyHash: $keyHash")
         /** KakaoSDK init */
@@ -108,6 +110,19 @@ class MainActivity : AppCompatActivity() {
             } else if (token != null) {
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                 Log.e(TAG, "로그인 성공 ${token.accessToken}") // 이 부분은 이미 로그인 된 상황에서 뒤로가기 버튼 눌렀다가 다시 kakaoAccount로 continue했을 때 나타남
+
+                UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+                    if (error != null) {
+                        Log.e(ContentValues.TAG, "토큰 정보 가져오기 실패 $error")
+                    } else if (tokenInfo != null) {
+                        Log.i(
+                            ContentValues.TAG, "토큰 정보 보기 성공" +
+                                    "\n회원번호: ${tokenInfo.id}" +
+                                    "\n만료시간: ${tokenInfo.expiresIn} 초"
+                        )
+                    }
+                }
+
                 val intent = Intent(this, kakaoLogin::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
@@ -135,6 +150,17 @@ class MainActivity : AppCompatActivity() {
                     //Log.e(TAG, "로그인 성공 ${token.accessToken}")
                     Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                    UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+                        if (error != null) {
+                            Log.e(ContentValues.TAG, "토큰 정보 가져오기 실패 $error")
+                        } else if (tokenInfo != null) {
+                            Log.i(
+                                ContentValues.TAG, "토큰 정보 보기 성공" +
+                                        "\n회원번호: ${tokenInfo.id}" +
+                                        "\n만료시간: ${tokenInfo.expiresIn} 초"
+                            )
+                        }
+                    }
                     finish()
                 }
             }
