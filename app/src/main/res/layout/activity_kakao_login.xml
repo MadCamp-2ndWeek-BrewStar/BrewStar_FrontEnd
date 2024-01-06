@@ -19,12 +19,15 @@
         tools:ignore="MissingConstraints" >
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:scaleType="centerInside"
             android:src="@drawable/logo_2"
-            tools:layout_editor_absoluteX="80dp"
-            tools:layout_editor_absoluteY="196dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:layout_width="337dp"
@@ -32,8 +35,9 @@
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
             android:src="@drawable/kakaotalk_2"
-            tools:layout_editor_absoluteX="37dp"
-            tools:layout_editor_absoluteY="399dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
