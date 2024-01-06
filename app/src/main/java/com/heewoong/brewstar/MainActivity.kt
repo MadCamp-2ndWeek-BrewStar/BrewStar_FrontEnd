@@ -1,5 +1,5 @@
 package com.heewoong.brewstar
-
+//connection test
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
