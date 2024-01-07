@@ -7,4 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="dark_green">#FF006F3F</color>
+    <color name="light_green">#FFD1E7E0</color>
+    <color name="dark_pink">#FFFD5368</color>
+    <color name="light_pink">#FFFFDDE1</color>
+    <color name="dark">#FF251512</color>
+    <color name="light_gray">#FFD9D9D9</color>
+
+    <color name="colorPrimary">#84cdc2</color>
+    <color name="colorPrimaryDark">#5ea096</color>
+    <color name="colorAccent">#fb777a</color>
+
+    <!--팝업배경-->
+    <color name="dialogColor">#A6333333</color>
 </resources>
