@@ -1,14 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".tab1">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/tv_favorite_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="#00FFFFFF"
+                android:text="Favorite Customs"
+                android:textColor="@color/dark"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ToggleButton
+                android:id="@+id/toggle"
+                android:layout_width="50dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/toggle_selector"
+                android:textOn=""
+                android:textOff=""
+                android:scaleType="centerInside"
+                android:checked="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="20dp"
+                android:layout_height="match_parent">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="140dp">
+
+                <ImageView
+                    android:id="@+id/favorite_rectangle_coffee"
+                    android:layout_width="100dp"
+                    android:layout_height="130dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/favorite_rectangle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_favorite_menu_coffee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Coffee"
+                    android:textColor="@color/dark"
+                    app:layout_constraintBottom_toBottomOf="@+id/favorite_rectangle_coffee"
+                    app:layout_constraintEnd_toEndOf="@+id/favorite_rectangle_coffee"
+                    app:layout_constraintStart_toStartOf="@+id/favorite_rectangle_coffee"/>
+
+                <ImageView
+                    android:id="@+id/iv_favorite_menu_coffee"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="7dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/coffee"
+                    app:layout_constraintEnd_toEndOf="@+id/favorite_rectangle_coffee"
+                    app:layout_constraintStart_toStartOf="@+id/favorite_rectangle_coffee"
+                    app:layout_constraintTop_toTopOf="@+id/favorite_rectangle_coffee" />
+
+
+                <ImageView
+                    android:id="@+id/favorite_rectangle_noncoffee"
+                    android:layout_width="100dp"
+                    android:layout_height="130dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/favorite_rectangle"
+                    app:layout_constraintBottom_toBottomOf="@+id/favorite_rectangle_coffee"
+                    app:layout_constraintEnd_toStartOf="@+id/favorite_rectangle_frappuccino"
+                    app:layout_constraintStart_toEndOf="@+id/favorite_rectangle_coffee"
+                    app:layout_constraintTop_toTopOf="@+id/favorite_rectangle_coffee" />
+
+                <TextView
+                    android:id="@+id/tv_favorite_menu_noncoffee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Non Coffee"
+                    android:textColor="@color/dark"
+                    app:layout_constraintBottom_toBottomOf="@+id/favorite_rectangle_noncoffee"
+                    app:layout_constraintEnd_toEndOf="@+id/favorite_rectangle_noncoffee"
+                    app:layout_constraintStart_toStartOf="@+id/favorite_rectangle_noncoffee"/>
+
+                <ImageView
+                    android:id="@+id/iv_favorite_menu_noncoffee"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="7dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/noncoffee"
+                    app:layout_constraintEnd_toEndOf="@+id/favorite_rectangle_noncoffee"
+                    app:layout_constraintStart_toStartOf="@+id/favorite_rectangle_noncoffee"
+                    app:layout_constraintTop_toTopOf="@+id/favorite_rectangle_noncoffee" />
+
+
+                <ImageView
+                    android:id="@+id/favorite_rectangle_frappuccino"
+                    android:layout_width="100dp"
+                    android:layout_height="130dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/favorite_rectangle"
+                    app:layout_constraintBottom_toBottomOf="@+id/favorite_rectangle_noncoffee"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/favorite_rectangle_noncoffee" />
+
+                <TextView
+                    android:id="@+id/tv_favorite_menu_frappuccino"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Frappuccino"
+                    android:textColor="@color/dark"
+                    app:layout_constraintBottom_toBottomOf="@+id/favorite_rectangle_frappuccino"
+                    app:layout_constraintEnd_toEndOf="@+id/favorite_rectangle_frappuccino"
+                    app:layout_constraintStart_toStartOf="@+id/favorite_rectangle_frappuccino"/>
+
+                <ImageView
+                    android:id="@+id/iv_favorite_menu_frappuccino"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="7dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/frappuccino"
+                    app:layout_constraintEnd_toEndOf="@+id/favorite_rectangle_frappuccino"
+                    app:layout_constraintStart_toStartOf="@+id/favorite_rectangle_frappuccino"
+                    app:layout_constraintTop_toTopOf="@+id/favorite_rectangle_frappuccino" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFavorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:visibility="invisible"
+                    tools:listitem="@layout/tab1_favorite_recyclerview" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_mycustom"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/tv_my_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="#00FFFFFF"
+                android:text="My Customs"
+                android:textColor="@color/dark"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMycustom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            tools:listitem="@layout/tab1_mycustom_recyclerview"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnAdd"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/add" />
 
 </FrameLayout>

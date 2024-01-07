@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="5dp">
+
+    <ImageView
+        android:id="@+id/mycustom_rectangle"
+        android:layout_width="wrap_content"
+        android:layout_height="86dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/mycustom_rectangle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_mycustom_circle"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="15dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/mycustom_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/mycustom_rectangle"
+        app:layout_constraintStart_toStartOf="@+id/mycustom_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/mycustom_rectangle" />
+
+    <ImageView
+        android:id="@+id/iv_mycustom_menu"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/coffee"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_mycustom_circle"
+        app:layout_constraintEnd_toEndOf="@+id/iv_mycustom_circle"
+        app:layout_constraintStart_toStartOf="@+id/iv_mycustom_circle"
+        app:layout_constraintTop_toTopOf="@+id/iv_mycustom_circle" />
+
+
+    <TextView
+        android:id="@+id/tv_mycustom_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:text="레몬아샷추"
+        android:textColor="@color/dark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/iv_mycustom_circle"
+        app:layout_constraintTop_toTopOf="@+id/iv_mycustom_circle" />
+
+    <TextView
+        android:id="@+id/tv_mycustom_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Iced Caffe Americano"
+        android:textColor="#FF7B7E79"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_mycustom_custom"
+        app:layout_constraintStart_toEndOf="@+id/iv_mycustom_circle"
+        app:layout_constraintTop_toBottomOf="@+id/tv_mycustom_name" />
+
+    <TextView
+        android:id="@+id/tv_mycustom_custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="7dp"
+        android:text="샷2 + 레몬시럽1 + 복숭아티백"
+        android:textColor="@color/dark"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_mycustom_circle"
+        app:layout_constraintStart_toEndOf="@+id/iv_mycustom_circle" />
+
+
+    <ImageView
+        android:id="@+id/iv_mycustom_star"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="5dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/mycustom_star"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_mycustom_like"
+        app:layout_constraintEnd_toStartOf="@+id/tv_mycustom_like"
+        app:layout_constraintTop_toTopOf="@+id/tv_mycustom_like" />
+
+    <TextView
+        android:id="@+id/tv_mycustom_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="100"
+        android:textColor="@color/dark"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="@+id/mycustom_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/tv_mycustom_name" />
+
+    <Button
+        android:id="@+id/btn_mycustom_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="수정"
+        android:textColor="#FF7B7E79"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_mycustom_circle"
+        app:layout_constraintEnd_toEndOf="@+id/mycustom_rectangle" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
