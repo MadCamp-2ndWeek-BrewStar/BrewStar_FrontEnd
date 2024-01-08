@@ -28,9 +28,11 @@ class MainActivity : AppCompatActivity() {
         // R.layout.activity_main == binding.root 임
         setContentView(binding.root)
 
+        supportActionBar?.hide()
 
         val keyHash = Utility.getKeyHash(this) // hash key 선언
         Log.e("Hash", "keyHash: $keyHash")
+
         /** KakaoSDK init */
         KakaoSdk.init(this, this.getString(R.string.kakao_native_app_key)) // 초기화, but 뭐하는건진 모르겠음
         // 근데 이 초기화를 내 코드 상 GlobalApplication에서도 하는데, 두 개 중 어떤 게 진짜로 초기화 역할을 하는 건 진 모르겠음
@@ -39,15 +41,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnKakaoLogin.setOnClickListener {
             kakaoLogin()
         }
-        /*
-        binding.btnStartKakaoLogout.setOnClickListener {
-            kakaoLogout() // 로그아웃
-        }
-        binding.btnStartKakaoUnlink.setOnClickListener {
-            kakaoUnlink() // 연결해제
-        }
-         */
     }
+
     private fun kakaoLogin() {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
@@ -123,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                val intent = Intent(this, kakaoLogin::class.java)
+                val intent = Intent(this, navigation::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
             }

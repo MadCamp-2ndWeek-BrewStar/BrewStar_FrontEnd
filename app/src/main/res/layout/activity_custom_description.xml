@@ -2,18 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutPopup"
+    android:id="@+id/layoutPopupDescription"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="#00FFFFFF"
-    tools:context=".MyCustomAdd">
+    tools:context=".CustomDescription">
 
     <ImageView
         android:id="@+id/popupView"
         android:layout_width="300dp"
         android:layout_height="522.447dp"
-        android:background="@color/dark_pink"
+        android:background="@color/dark_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/popupCoffee"
+        android:id="@+id/popupImage"
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:background="@android:color/transparent"
@@ -131,14 +131,14 @@
         app:layout_constraintStart_toStartOf="@+id/popupView"
         app:layout_constraintTop_toBottomOf="@+id/popupCustom" />
 
-    <EditText
+    <TextView
         android:id="@+id/editPopupName"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="@color/light_green"
-        android:hint="나만의 이름을 입력해주세요."
+        android:hint="아샷추누른거 가져오기."
         android:inputType="text"
         android:textAlignment="textStart"
         android:textColor="@color/light_green"
@@ -149,14 +149,14 @@
         app:layout_constraintStart_toEndOf="@+id/popupName"
         app:layout_constraintTop_toTopOf="@+id/popupName" />
 
-    <EditText
+    <TextView
         android:id="@+id/editPopupMenu"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="@color/light_green"
-        android:hint="메뉴를 입력해주세요."
+        android:hint="메뉴누른거 가져오기"
         android:inputType="text"
         android:textAlignment="textStart"
         android:textColor="@color/light_green"
@@ -167,14 +167,14 @@
         app:layout_constraintStart_toEndOf="@+id/popupMenu"
         app:layout_constraintTop_toTopOf="@+id/popupMenu" />
 
-    <EditText
+    <TextView
         android:id="@+id/editPopupCustom"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="@color/light_green"
-        android:hint="커스텀 내용을 입력해주세요."
+        android:hint="커스텀 누른거 가져오기."
         android:inputType="text"
         android:textAlignment="textStart"
         android:textColor="@color/light_green"
@@ -185,14 +185,14 @@
         app:layout_constraintStart_toEndOf="@+id/popupCustom"
         app:layout_constraintTop_toTopOf="@+id/popupCustom" />
 
-    <EditText
+    <TextView
         android:id="@+id/editPopupDescription"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="@color/light_green"
-        android:hint="설명을 입력해주세요."
+        android:hint="설명 누른거 가져오기."
         android:inputType="text"
         android:textAlignment="textStart"
         android:textColor="@color/light_green"
@@ -203,16 +203,7 @@
         app:layout_constraintStart_toEndOf="@+id/popupDescription"
         app:layout_constraintTop_toTopOf="@+id/popupDescription" />
 
-    <ImageButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="-25dp"
-        android:background="@android:color/transparent"
-        android:scaleType="centerInside"
-        android:src="@drawable/question_mark"
-        app:layout_constraintBottom_toBottomOf="@+id/popupCustom"
-        app:layout_constraintEnd_toStartOf="@+id/popupCustom"
-        app:layout_constraintTop_toTopOf="@+id/popupCustom" />
+
 
     <TextView
         android:id="@+id/popupMadeBy"
@@ -228,18 +219,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/popupSaveBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:backgroundTint="@color/light_pink"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:text="Save"
-        android:textColor="@color/dark_pink"
-        app:layout_constraintBottom_toBottomOf="@+id/popupView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
