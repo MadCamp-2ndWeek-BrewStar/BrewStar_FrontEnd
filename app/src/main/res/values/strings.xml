@@ -13,4 +13,7 @@
     <string name="kakao_redirection_scheme">kakao3d141bca67cf695a3f7d7a7d5eb04c53</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_navigation">navigation</string>
+    <string name="tab_text_1">My Page</string>
+    <string name="tab_text_2">All Customs</string>
 </resources>

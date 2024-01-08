@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                         Log.e(TAG, "사용자 정보 요청 실패 $error")
                     } else if (user != null) {
                         Log.e(TAG, "로그인 성공했냐? $user") // 이 부분은 이미 로그인 정보가 담겨있어서 버튼을 누르면 다시 로그인이 되었을 때 뜸
-                        val intent = Intent(this, kakaoLogin::class.java)
+                        val intent = Intent(this, navigation::class.java)
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                         finish()
                     }
