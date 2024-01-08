@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layoutTab2"
     tools:context=".tab2">
 
     <LinearLayout
@@ -72,7 +73,7 @@
                     app:layout_constraintStart_toStartOf="@+id/coffeeCard" />
 
                 <ImageButton
-                    android:id="@+id/iv_favorite_menu_coffee"
+                    android:id="@+id/coffeeBtn"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginTop="0dp"
@@ -112,7 +113,7 @@
                     app:layout_constraintStart_toStartOf="@+id/nonCoffeeCard" />
 
                 <ImageButton
-                    android:id="@+id/iv_favorite_menu_noncoffee"
+                    android:id="@+id/nonCoffeeBtn"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginTop="0dp"
@@ -152,7 +153,7 @@
                     app:layout_constraintStart_toStartOf="@+id/frappuccinoCard"/>
 
                 <ImageButton
-                    android:id="@+id/iv_favorite_menu_frappuccino"
+                    android:id="@+id/frappuccinoBtn"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginTop="0dp"

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="5dp">
+
+    <ImageView
+        android:id="@+id/custom_rectangle"
+        android:layout_width="wrap_content"
+        android:layout_height="86dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/greenbox"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_mycustom_circle"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="15dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/mycustom_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/custom_rectangle"
+        app:layout_constraintStart_toStartOf="@+id/custom_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/custom_rectangle" />
+
+    <ImageView
+        android:id="@+id/iv_mycustom_menu"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/coffee"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_mycustom_circle"
+        app:layout_constraintEnd_toEndOf="@+id/iv_mycustom_circle"
+        app:layout_constraintStart_toStartOf="@+id/iv_mycustom_circle"
+        app:layout_constraintTop_toTopOf="@+id/iv_mycustom_circle" />
+
+
+    <TextView
+        android:id="@+id/customName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:text="레몬아샷추"
+        android:textColor="@color/dark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/iv_mycustom_circle"
+        app:layout_constraintTop_toTopOf="@+id/iv_mycustom_circle" />
+
+    <TextView
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Iced Caffe Americano"
+        android:textColor="#FF7B7E79"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/customOption"
+        app:layout_constraintStart_toEndOf="@+id/iv_mycustom_circle"
+        app:layout_constraintTop_toBottomOf="@+id/customName" />
+
+    <TextView
+        android:id="@+id/customOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="7dp"
+        android:text="샷2 + 레몬시럽1 + 복숭아티백"
+        android:textColor="@color/dark"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_mycustom_circle"
+        app:layout_constraintStart_toEndOf="@+id/iv_mycustom_circle" />
+
+
+    <ImageView
+        android:id="@+id/iv_mycustom_star"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="5dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/mycustom_star"
+        app:layout_constraintBottom_toBottomOf="@+id/likes"
+        app:layout_constraintEnd_toStartOf="@+id/likes"
+        app:layout_constraintTop_toTopOf="@+id/likes" />
+
+    <TextView
+        android:id="@+id/likes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="100"
+        android:textColor="@color/dark"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="@+id/custom_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/customName" />
+
+    <TextView
+        android:id="@+id/customCreator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:layout_marginRight="10dp"
+        android:text="\@heewoong_ahn"
+        android:textColor="@color/dark"
+        android:textSize="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/custom_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/customName" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
