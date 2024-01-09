@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.heewoong.brewstar.databinding.ActivityCustomDescriptionBinding
 
-class FavoriteAdapter (private var FavoriteItemList: ArrayList<FavoriteItem>) :
+class FavoriteAdapter (private var FavoriteItemList: ArrayList<MyCustomsItem>) :
         RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int ): FavoriteViewHolder {
@@ -35,8 +35,34 @@ class FavoriteAdapter (private var FavoriteItemList: ArrayList<FavoriteItem>) :
             var bindingPopup = ActivityCustomDescriptionBinding.inflate(LayoutInflater.from(holder.itemView.context))
             val view: View = bindingPopup.layoutPopupDescription
 
-            builder.setView(view)
 
+            // activity의 각 요소들을 원래 data들로 채우는 과정
+            val favoriteItemOne = FavoriteItemList[position]
+            val oldName: String = favoriteItemOne.name
+            val oldMenu: String = favoriteItemOne.menu
+            val oldCustom: String = favoriteItemOne.custom
+            val oldLikes: String = favoriteItemOne.likes
+            val oldCategory: String =favoriteItemOne.category
+            val oldDescription: String = favoriteItemOne.description
+            val oldCreator: String = favoriteItemOne.creator
+
+            builder.setView(view)
+            view.findViewById<TextView>(R.id.editPopupName).setText(oldName)
+            view.findViewById<TextView>(R.id.editPopupMenu).setText(oldMenu)
+            view.findViewById<TextView>(R.id.editPopupCustom).setText(oldCustom)
+            view.findViewById<TextView>(R.id.popuplikes).setText(oldLikes)
+            view.findViewById<TextView>(R.id.editPopupDescription).setText(oldDescription)
+            view.findViewById<TextView>(R.id.popupMadeBy).setText(oldCreator)
+            view.findViewById<ImageView>(R.id.popupStar).setImageResource(R.drawable.like2)
+            if (oldCategory == "Coffee") {
+                view.findViewById<ImageView>(R.id.popupImage).setImageResource(R.drawable.coffee)
+            } else if (oldCategory == "Non-Coffee") {
+                view.findViewById<ImageView>(R.id.popupImage).setImageResource(R.drawable.noncoffee)
+            } else {
+                view.findViewById<ImageView>(R.id.popupImage).setImageResource(R.drawable.frappuccino)
+            }
+
+            // builder create
             val alertDialog: AlertDialog = builder.create()
 
             // close 버튼 누르면 다시 돌아가기
@@ -74,7 +100,7 @@ class FavoriteAdapter (private var FavoriteItemList: ArrayList<FavoriteItem>) :
         val picture = favoriteItemView.findViewById<ImageView>(R.id.iv_favorite_menu)
 
         // item의 name, menu, custom, likes를 할당해주는 함수
-        fun bind(item: FavoriteItem) {
+        fun bind(item: MyCustomsItem) {
             tv_name.text = item.name
             tv_custom.text = item.custom
             if (item.category == "Coffee") {

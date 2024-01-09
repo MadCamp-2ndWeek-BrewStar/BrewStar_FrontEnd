@@ -8,7 +8,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface RetrofitInterface {
@@ -26,7 +29,19 @@ interface RetrofitInterface {
     fun getMyCustom(@Query("userId") parameter: String): Call<List<List<String>>>
 
     @GET("/allCustoms")
-    fun getAllCustoms(@Query("userId") parameter: String): Call<List<List<String>>>
+    fun getAllCustoms(): Call<List<List<String>>>
+
+    @FormUrlEncoded
+    @POST("/addCustom")
+    fun addCustom(
+        @Field("name") name: String,
+        @Field("menu") menu: String,
+        @Field("category") category: String,
+        @Field("custom") custom: String,
+        @Field("Description") Description: String,
+        @Field("creator") creator: String,
+        @Field("creatornum") creatornum: String
+    ): Call<Void>
 
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
 //        private const val BASE_URL = "http://192.249.30.224:80" //

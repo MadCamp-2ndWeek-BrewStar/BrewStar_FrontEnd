@@ -53,10 +53,10 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var btn_back: ImageButton
 
     private var myCustomItemList = ArrayList<MyCustomsItem>()
-    private var favoriteItemList = ArrayList<FavoriteItem>()
-    private var collectItemListCoffee = ArrayList<FavoriteItem>()
-    private var collectItemListNonCoffee = ArrayList<FavoriteItem>()
-    private var collectItemListFrappuccino = ArrayList<FavoriteItem>()
+    private var favoriteItemList = ArrayList<MyCustomsItem>()
+    private var collectItemListCoffee = ArrayList<MyCustomsItem>()
+    private var collectItemListNonCoffee = ArrayList<MyCustomsItem>()
+    private var collectItemListFrappuccino = ArrayList<MyCustomsItem>()
 
     // 토글 켤 때 다 invisible하기 위해서
     private lateinit var rectangle1: ImageView
@@ -219,7 +219,7 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 //        }
 
         // 여기서, @GET("/favorites")를 불러와야.
-        getDataTab1()
+        getTab1Favorite()
 
         toggle = binding.toggle
         toggle.setOnCheckedChangeListener { _, isChecked ->
@@ -330,67 +330,25 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
 
-
-    private fun getDataTab1() {
-        // data를 받아서, collectItemList에 add하면 됨.
-        api.getFavorite("3259657340").enqueue(object : Callback<List<List<String>>> {
-            override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
-                if (response.isSuccessful) {
-                    Log.e(ContentValues.TAG, "네트워크 오류: dd")
-                    val result = response.body()
-                    result?.let{
-                        handleData(it)
-                    }
-                } else {
-                    // HTTP 요청이 실패한 경우의 처리
-                    Log.e(ContentValues.TAG, "HTTP 요청 실패: ${response.code()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<List<String>>>, t: Throwable) {
-                Log.e(ContentValues.TAG, "네트워크 오류: ${t.message}")
-            }
-        })
-    }
-    private fun handleData(data: List<List<String>>) {
-        for (record in data) {
-            val getname = record[2]
-            val getcustom = record[4]
-            val getcategory = record[1]
-            Log.d("plz name", "$getname")
-
-            // favoriteItem 형식으로 변환
-            val favoriteItem = FavoriteItem(getname, getcustom, getcategory)
-            Log.d(ContentValues.TAG, "Added items to collectItemList: $favoriteItem")
-            favoriteItemList.add(favoriteItem)
-            Log.d(ContentValues.TAG, "Added items to collectItemList: $favoriteItemList")
-            favoriteAdapter.notifyDataSetChanged()
-        }
-    }
-
-
-
-
-
     private fun getAllMyCustom() {
         myCustomAdapter = MyCustomAdapter(myCustomItemList)
         rv_mycustom = binding.rvMycustom
         rv_mycustom.layoutManager = LinearLayoutManager(requireContext())
         rv_mycustom.adapter = myCustomAdapter
 
-        for (i: Int in 1..10) {
-            myCustomItemList.add(
-                MyCustomsItem(
-                    "레몬 아샷추",
-                    "Iced Caffe Americano",
-                    "샷2 + 레몬시럽1 + 복숭아티백",
-                    "101"
-                )
-            )
-        }
+//        for (i: Int in 1..10) {
+//            myCustomItemList.add(
+//                MyCustomsItem(
+//                    "레몬 아샷추",
+//                    "Iced Caffe Americano",
+//                    "샷2 + 레몬시럽1 + 복숭아티백",
+//                    "101"
+//                )
+//            )
+//        }
 
         // 여기서,@GET("/mycustoms") 불러와야.
-        // creatornum을 가지고 판별하면 됨.
+        getTab1MyCustoms()
 
         btn_add = binding.btnAdd
         btn_add.setOnClickListener {
@@ -423,12 +381,31 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         var newMenu: String = ""
         var newCustom: String = ""
         var newLikes: String = "0"
+        var newCategory: String = "Coffee"
+        var newDescription: String = ""
+        var newCreator: String = "안희웅"
+        var newCreatornum: String = "3259657340"
 
         // save 버튼 누르면 추가되기
         view.findViewById<Button>(R.id.popupSaveBtn).setOnClickListener {
             newName += view.findViewById<EditText>(R.id.editPopupName).text.toString()
             newMenu += view.findViewById<EditText>(R.id.editPopupMenu).text.toString()
             newCustom += view.findViewById<EditText>(R.id.editPopupCustom).text.toString()
+            newDescription += view.findViewById<EditText>(R.id.editPopupDescription).text.toString()
+
+            if (newMenu == "Java Chip Frappuccino" ||
+                newMenu == "Caramel Frappuccino" ||
+                newMenu == "Malcha Cream Frappuccino from Jeju Organiic Farm") {
+                newCategory = "Frappuccino"
+                view.findViewById<ImageView>(R.id.popupCoffee).setImageResource(R.drawable.frappuccino)
+            } else if (newMenu == "Iced Grapefruit Honey Black Tea" ||
+                newMenu == "Grapefruit Honey Black Tea" ||
+                newMenu == "Iced Malcha Latte from Jeju Organic Farm" ||
+                newMenu == "Iced Signature Chocolate" ||
+                newMenu == "Signature Chocolate") {
+                newCategory = "Non-Coffee"
+                view.findViewById<ImageView>(R.id.popupCoffee).setImageResource(R.drawable.noncoffee)
+            }
 
             alertDialog.dismiss()
 
@@ -438,7 +415,22 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             // category는 메뉴 보고 조건문 써서 입력
             // creator, creatornum은 이 사람의 정보 그대로. 근데 불러오기도 해야하나?
             // likes와 wish는 모두 0, O로 초기화.
-            myCustomItemList.add(MyCustomsItem(newName, newMenu, newCustom, newLikes))
+            val call = api.addCustom(newName, newMenu, newCategory, newCustom, newDescription, newCreator, newCreatornum)
+            call.enqueue(object: Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.e("Lets go", "success!! good!!")
+                    } else {
+                        Log.e("Lets go", "what's wrong...")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e("mad..nn", "so sad plz")
+                }
+            })
+            
+            myCustomItemList.add(MyCustomsItem(newName, newMenu, newCustom, newLikes, newCategory, newDescription, newCreator))
             myCustomAdapter.notifyDataSetChanged()
         }
 
@@ -518,6 +510,105 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         ItemTouchHelper(itemTouchCallback).attachToRecyclerView(rv_mycustom)
     }
+
+
+
+    // favorite 누른 애들
+    private fun getTab1Favorite() {
+        // data를 받아서, favoriteItemList에 add하면 됨.
+        api.getFavorite("3259657340").enqueue(object : Callback<List<List<String>>> {
+            override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
+                if (response.isSuccessful) {
+                    Log.e(ContentValues.TAG, "네트워크 오류: dd")
+                    val result = response.body()
+                    result?.let{
+                        handleTab1Favorite(it)
+                    }
+                } else {
+                    // HTTP 요청이 실패한 경우의 처리
+                    Log.e(ContentValues.TAG, "HTTP 요청 실패: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<List<String>>>, t: Throwable) {
+                Log.e(ContentValues.TAG, "네트워크 오류: ${t.message}")
+            }
+        })
+    }
+    private fun handleTab1Favorite(data: List<List<String>>) {
+        for (record in data) {
+            val getname = record[2]
+            val getmenu = record[3]
+            val getcustom = record[4]
+            val getlikes = record[7]
+            val getcategory = record[1]
+            val getdescription = record[5]
+            val getcreator = record[6]
+            Log.d("plz name", "$getname")
+
+//            // favoriteItem 형식으로 변환
+//            val favoriteItem = FavoriteItem(getname, getcustom, getcategory)
+            val favoriteItem = MyCustomsItem(getname, getmenu, getcustom, getlikes, getcategory, getdescription, getcreator)
+            Log.d(ContentValues.TAG, "Added items to collectItemList: $favoriteItem")
+            favoriteItemList.add(favoriteItem)
+            Log.d(ContentValues.TAG, "Added items to collectItemList: $favoriteItemList")
+            favoriteAdapter.notifyDataSetChanged()
+        }
+    }
+
+
+    // My Customs 받기
+    private fun getTab1MyCustoms() {
+        // data를 받아서, myCustomItemList에 add하면 됨.
+        api.getMyCustom("3259657340").enqueue(object : Callback<List<List<String>>> {
+            override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
+                if (response.isSuccessful) {
+                    Log.e(ContentValues.TAG, "네트워크 오류: dd")
+                    val result = response.body()
+                    result?.let{
+                        handleTab1MyCustoms(it)
+                    }
+                } else {
+                    // HTTP 요청이 실패한 경우의 처리
+                    Log.e(ContentValues.TAG, "HTTP 요청 실패: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<List<String>>>, t: Throwable) {
+                Log.e(ContentValues.TAG, "네트워크 오류: ${t.message}")
+            }
+        })
+    }
+    private fun handleTab1MyCustoms(data: List<List<String>>) {
+        for (record in data) {
+            val getname = record[2]
+            val getmenu = record[3]
+            val getcustom = record[4]
+            val getlikes = record[7]
+            val getcategory = record[1]
+            val getdescription = record[5]
+            val getcreator = record[6]
+            Log.d("plz name", "$getname")
+
+            // favoriteItem 형식으로 변환
+            val favoriteItem = FavoriteItem(getname, getcustom, getcategory)
+            val myCustomItem = MyCustomsItem(getname, getmenu, getcustom, getlikes, getcategory, getdescription, getcreator)
+            Log.d(ContentValues.TAG, "Added items to myCustomItemList: $myCustomItem")
+            myCustomItemList.add(myCustomItem)
+            Log.d(ContentValues.TAG, "Added items to collectItemList: $myCustomItemList")
+            myCustomAdapter.notifyDataSetChanged()
+        }
+    }
+
+
+    
+    // add Customs
+    private fun addNewCustom() {
+        
+    }
+
+
+
 
 
     companion object {
