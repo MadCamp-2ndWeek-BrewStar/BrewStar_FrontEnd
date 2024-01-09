@@ -22,9 +22,13 @@
 
     <TextView
         android:id="@+id/tv_favorite_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="3dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="레몬 아샷추 헤헤"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -36,10 +40,14 @@
 
     <TextView
         android:id="@+id/tv_favorite_custom"
-        android:layout_width="90dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="2dp"
+        android:layout_marginEnd="3dp"
         android:layout_marginBottom="5dp"
+        android:ellipsize="end"
+        android:maxLines="3"
         android:text="샷2 + 레몬시럽1 + 복숭아티백+뭐든좋아+음하하하"
         android:textAlignment="center"
         android:textColor="@color/white"

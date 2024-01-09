@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.heewoong.brewstar.databinding.ActivityMyCustomAddBinding
@@ -42,19 +43,39 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
             var bindingPopup = ActivityMyCustomAddBinding.inflate(LayoutInflater.from(holder.itemView.context))
             val view: View = bindingPopup.layoutPopup
 
-            val oldName: String = holder.tv_name.text.toString()
-            val oldMenu: String = holder.tv_menu.text.toString()
-            val oldCustom: String = holder.tv_custom.text.toString()
-            val oldLikes: String = holder.tv_likes.text.toString()
+//            val oldName: String = holder.tv_name.text.toString()
+//            val oldMenu: String = holder.tv_menu.text.toString()
+//            val oldCustom: String = holder.tv_custom.text.toString()
+//            val oldLikes: String = holder.tv_likes.text.toString()
+
+            // activity의 각 요소들을 원래 data들로 채우는 과정
+            val myCustomItemOne = myCustomItemList[position]
+            val oldName: String = myCustomItemOne.name
+            val oldMenu: String = myCustomItemOne.menu
+            val oldCustom: String = myCustomItemOne.custom
+            val oldLikes: String = myCustomItemOne.likes
+            val oldCategory: String = myCustomItemOne.category
+            val oldDescription: String = myCustomItemOne.description
+            val oldCreator: String = myCustomItemOne.creator
 
             builder.setView(view)
             view.findViewById<EditText>(R.id.editPopupName).setText(oldName)
             view.findViewById<EditText>(R.id.editPopupMenu).setText(oldMenu)
+            view.findViewById<EditText>(R.id.editPopupMenu).isFocusable = false
             view.findViewById<EditText>(R.id.editPopupCustom).setText(oldCustom)
             view.findViewById<TextView>(R.id.popuplikes).setText(oldLikes)
-//            val intent = Intent(holder.itemView.context, MyCustomEdit::class.java)
-//            intent.putExtra("old name", oldName)
-//            holder.itemView.context.startActivity(intent)
+            view.findViewById<EditText>(R.id.editPopupDescription).setText(oldDescription)
+            view.findViewById<TextView>(R.id.popupMadeBy).setText(oldCreator)
+            if (oldCategory == "Coffee") {
+                view.findViewById<ImageView>(R.id.popupCoffee).setImageResource(R.drawable.coffee)
+            } else if (oldCategory == "Non-Coffee") {
+                view.findViewById<ImageView>(R.id.popupCoffee).setImageResource(R.drawable.noncoffee)
+            } else {
+                view.findViewById<ImageView>(R.id.popupCoffee).setImageResource(R.drawable.frappuccino)
+            }
+
+
+            // builder create
             val alertDialog: AlertDialog = builder.create()
 
             // close 버튼 누르면 다시 돌아가기
@@ -63,8 +84,9 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
             }
 
             var newName: String = ""
-            var newMenu: String = ""
+//            var newMenu: String = ""
             var newCustom: String = ""
+            var newDescription: String = ""
 
             // save 버튼 누르면 추가되기
             view.findViewById<Button>(R.id.popupSaveBtn).setOnClickListener {
@@ -74,14 +96,19 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
                 // 좋아요도 수정하는 건... 그건 save와는 별개로 쳐야하나. 일단은 빼고 생각하자.
                 
                 newName += view.findViewById<EditText>(R.id.editPopupName).text.toString()
-                newMenu += view.findViewById<EditText>(R.id.editPopupMenu).text.toString()
+                //newMenu += view.findViewById<EditText>(R.id.editPopupMenu).text.toString()
                 newCustom += view.findViewById<EditText>(R.id.editPopupCustom).text.toString()
+                newDescription += view.findViewById<EditText>(R.id.editPopupDescription).text.toString()
 
                 alertDialog.dismiss()
                 
                 // 좋아요 수는 그대로 유지해야 함
-                myCustomItemList.add(MyCustomsItem(newName, newMenu, newCustom, oldLikes))
+                myCustomItemList.add(MyCustomsItem(newName, oldMenu, newCustom, oldLikes, oldCategory, newDescription, oldCreator))
+                // 그리고 여기서 삭제?
                 removeMyCustomItem(position)
+
+                // 나중에 그냥, NewName, NewMenu, NewCustom, NewDescription만 post로 보내면 된다. 그리고 나서
+                // notifyDataSetChanged() 하면 되지 않을까.
             }
 
 
@@ -126,6 +153,7 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
         val tv_custom = myCustomItemView.findViewById<TextView>(R.id.tv_mycustom_custom)
         val tv_likes = myCustomItemView.findViewById<TextView>(R.id.tv_mycustom_like)
         val btn_edit = myCustomItemView.findViewById<Button>(R.id.btn_mycustom_edit)
+        val picture = myCustomItemView.findViewById<ImageView>(R.id.iv_mycustom_menu)
 
         // item의 name, menu, custom, likes를 할당해주는 함수
         fun bind(item: MyCustomsItem) {
@@ -133,6 +161,13 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
             tv_menu.text = item.menu
             tv_custom.text = item.custom
             tv_likes.text = item.likes
+            if (item.category == "Coffee") {
+                picture.setImageResource(R.drawable.coffee)
+            } else if (item.category == "Non-Coffee") {
+                picture.setImageResource(R.drawable.noncoffee)
+            } else {
+                picture.setImageResource(R.drawable.frappuccino)
+            }
         }
     }
 }
