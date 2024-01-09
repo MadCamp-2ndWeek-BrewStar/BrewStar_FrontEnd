@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.heewoong.brewstar.databinding.ActivityCustomDescriptionBinding
 
@@ -24,7 +22,7 @@ class topTenAdapter(private val context: Context,
         private val option: TextView = itemView.findViewById(R.id.customOption)
         private val creator: TextView = itemView.findViewById(R.id.customCreator)
         private val likes: TextView = itemView.findViewById(R.id.likes)
-        private val showDescription: CardView = itemView.findViewById(R.id.showDescription)
+        private val showDescription: ImageView = itemView.findViewById(R.id.top10_rectangle)
         private lateinit var bindingPopup: ActivityCustomDescriptionBinding
 
         fun bindView(item: topTenDummy, context: Context) {

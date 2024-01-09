@@ -64,6 +64,9 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
 
+    // 새로고침을 위한 implementation
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
 
 
     // 2.8.4 옛날버전도 해보기

@@ -6,12 +6,12 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingHorizontal="20dp"
-    android:paddingVertical="5dp">
+    android:paddingVertical="1dp">
 
     <ImageView
         android:id="@+id/mycustom_rectangle"
         android:layout_width="wrap_content"
-        android:layout_height="86dp"
+        android:layout_height="80dp"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
         android:src="@drawable/mycustom_rectangle"
@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/iv_mycustom_circle"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_marginStart="15dp"
         android:scaleType="centerInside"
         android:src="@drawable/mycustom_circle"
@@ -31,8 +31,8 @@
 
     <ImageView
         android:id="@+id/iv_mycustom_menu"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:scaleType="centerInside"
         android:src="@drawable/coffee"
         app:layout_constraintBottom_toBottomOf="@+id/iv_mycustom_circle"

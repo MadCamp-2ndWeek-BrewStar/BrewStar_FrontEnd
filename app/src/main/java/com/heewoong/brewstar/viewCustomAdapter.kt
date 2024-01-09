@@ -9,11 +9,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.heewoong.brewstar.databinding.ActivityCustomDescriptionBinding
 
-class viewCustomAdapter(private val context: Context, private val datas: List<customDummy>) : RecyclerView.Adapter<viewCustomAdapter.ViewHolder>() {
+class viewCustomAdapter(private val context: Context, private var datas: List<customDummy>) : RecyclerView.Adapter<viewCustomAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val name: TextView = itemView.findViewById(R.id.customName)
@@ -58,6 +57,11 @@ class viewCustomAdapter(private val context: Context, private val datas: List<cu
             }
             alertDialog.show()
         }
+    }
+
+    fun setItems(list: ArrayList<customDummy>) {
+        datas = list
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =

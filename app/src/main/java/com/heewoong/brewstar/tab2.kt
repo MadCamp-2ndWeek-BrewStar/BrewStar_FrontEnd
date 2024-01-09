@@ -3,20 +3,24 @@ package com.heewoong.brewstar
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.heewoong.brewstar.databinding.FragmentTab2Binding
 
 
+class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-class tab2 : Fragment() {
-
+    private lateinit var binding: FragmentTab2Binding
     private lateinit var recyclerView: RecyclerView
+    private var itemList = ArrayList<topTenDummy>()
 
+    // 스와이프 새로고침
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,39 +32,65 @@ class tab2 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_tab2, container, false)
-        recyclerView = root.findViewById(R.id.recycler2)
+        binding = FragmentTab2Binding.inflate(inflater, container, false)
+
+        swipeRefreshLayout = binding.swipeLayout
+        swipeRefreshLayout.setOnRefreshListener(this)
+        doingMain()
+
+        return binding.root
+    }
+
+    private fun doingMain() {
+        recyclerView = binding.recycler2
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-        val dummy = listOf(
-            topTenDummy("레몬 아샷추", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-            topTenDummy("레몬 아샷추", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-            topTenDummy("레몬 아샷추", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-            topTenDummy("레몬 아샷추", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-            topTenDummy("레몬 아샷추", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-            topTenDummy("레몬 아샷추", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-            topTenDummy("레몬 아샷추", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-            topTenDummy("레몬 아샷추", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-            topTenDummy("레몬 아샷추", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
+//        val dummy = listOf(
+//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
+//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
+//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
+//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
+//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
+//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
+//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
+//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
+//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
+//
+//                )
 
-                )
-        recyclerView.adapter = topTenAdapter(requireContext(), dummy)
-
-        root.findViewById<ImageButton>(R.id.coffeeBtn).setOnClickListener{
-
-            val intent = Intent(requireContext(), ViewCustoms::class.java)
-            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-
+        for ( i: Int in 1..10) {
+            itemList.add(topTenDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "50"))
         }
 
+        //recyclerView.adapter = topTenAdapter(requireContext(), dummy)
+        recyclerView.adapter = topTenAdapter(requireContext(), itemList)
 
-
-
-        return root
-//        return inflater.inflate(R.layout.fragment_tab2, container, false)
+        binding.coffeeCard.setOnClickListener{
+            // 여기서, @GET("/Coffee) 불러와야.
+            val intent = Intent(requireContext(), ViewCustoms::class.java)
+            intent.putExtra("selected", "Coffee")
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        }
+        binding.nonCoffeeCard.setOnClickListener{
+            // 여기서, @GET("/Non-Coffee) 불러와야.
+            val intent = Intent(requireContext(), ViewCustoms::class.java)
+            intent.putExtra("selected", "Non Coffee")
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        }
+        binding.frappuccinoCard.setOnClickListener{
+            // 여기서, @GET("/Frappuccino) 불러와야.
+            val intent = Intent(requireContext(), ViewCustoms::class.java)
+            intent.putExtra("selected", "Frappuccino")
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        }
     }
 
+    override fun onRefresh() {
+        itemList.clear()
+        doingMain()
+        swipeRefreshLayout.isRefreshing = false
+    }
 
 
 }

@@ -1,10 +1,12 @@
 package com.heewoong.brewstar
 
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -14,23 +16,36 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.heewoong.brewstar.databinding.ActivityMyCustomAddBinding
 import com.heewoong.brewstar.databinding.FragmentTab1Binding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class tab1 : Fragment() {
+class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var binding: FragmentTab1Binding
     private lateinit var myCustomAdapter: MyCustomAdapter
     private lateinit var favoriteAdapter: FavoriteAdapter
-    private lateinit var collectAdapter: FavoriteAdapter
+    private lateinit var collectAdapterCoffee: FavoriteAdapter
+    private lateinit var collectAdapterNonCoffee: FavoriteAdapter
+    private lateinit var collectAdapterFrappuccino: FavoriteAdapter
+
     private lateinit var rv_favorite: RecyclerView
-    private lateinit var rv_collect: RecyclerView
+    private lateinit var rv_collect_coffee: RecyclerView
+    private lateinit var rv_collect_non_coffee: RecyclerView
+    private lateinit var rv_collect_frappuccino: RecyclerView
     private lateinit var rv_mycustom: RecyclerView
     //private lateinit var btn_edit: Button
     private lateinit var btn_add: ImageButton
@@ -39,21 +54,29 @@ class tab1 : Fragment() {
 
     private var myCustomItemList = ArrayList<MyCustomsItem>()
     private var favoriteItemList = ArrayList<FavoriteItem>()
-    private var collectItemList = ArrayList<FavoriteItem>()
+    private var collectItemListCoffee = ArrayList<FavoriteItem>()
+    private var collectItemListNonCoffee = ArrayList<FavoriteItem>()
+    private var collectItemListFrappuccino = ArrayList<FavoriteItem>()
 
     // 토글 켤 때 다 invisible하기 위해서
     private lateinit var rectangle1: ImageView
     private lateinit var rectangle2: ImageView
     private lateinit var rectangle3: ImageView
-    private lateinit var menu1: ImageButton
-    private lateinit var menu2: ImageButton
-    private lateinit var menu3: ImageButton
-    private lateinit var text1: Button
-    private lateinit var text2: Button
-    private lateinit var text3: Button
+    private lateinit var menu1: ImageView
+    private lateinit var menu2: ImageView
+    private lateinit var menu3: ImageView
+    private lateinit var text1: TextView
+    private lateinit var text2: TextView
+    private lateinit var text3: TextView
 
     //popup창을 위한 준비들
     private lateinit var bindingPopup: ActivityMyCustomAddBinding
+
+    // 서버에서 불러오기
+    val api = RetrofitInterface.create()
+
+    // 스와이프해서 새로고침 구현
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,12 +87,22 @@ class tab1 : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         binding = FragmentTab1Binding.inflate(inflater, container, false)
+
+        // 새로고침
+        swipeRefreshLayout = binding.swipeLayout
+        swipeRefreshLayout.setOnRefreshListener(this)
+
         initiation() // 모든 view들 정의
         turnToggle() // Favorite Customs 구현 부분
         getAllMyCustom() // My Customs 구현 부분
-        clickCategory() // 각 카테고리 눌렀을 때 구현 부분
+//        clickCategory() // 각 카테고리 눌렀을 때 구현 부분
+        lifecycleScope.launch {
+            delay(1000)
+            clickCategory() // 각 카테고리 눌렀을 때 구현 부분
+        }
 
         
         return binding.root
@@ -90,45 +123,43 @@ class tab1 : Fragment() {
     }
 
     private fun clickCoffee() {
-        menu1.setOnClickListener {
+        // 여기서,@GET("/favorite") 불러 온 뒤, 그 데이터를 가지고
+        // @GET("/Coffee")를 불러와야.
+
+        rectangle1.setOnClickListener {
             menu1.setImageResource(R.drawable.coffee)
             text1.setText("Coffee")
             clickCollectOne()
-        }
-        text1.setOnClickListener {
-            menu1.setImageResource(R.drawable.coffee)
-            text1.setText("Coffee")
-            clickCollectOne()
+            rv_collect_coffee.visibility = VISIBLE
         }
     }
     private fun clickNonCoffee() {
-        menu2.setOnClickListener {
+        // 여기서,@GET("/favorite") 불러 온 뒤, 그 데이터를 가지고
+        // @GET("/Non-Coffee")를 불러와야.
+
+        rectangle2.setOnClickListener {
             menu1.setImageResource(R.drawable.noncoffee)
             text1.setText("Non Coffee")
             clickCollectOne()
-        }
-        text2.setOnClickListener {
-            menu1.setImageResource(R.drawable.noncoffee)
-            text1.setText("Non Coffee")
-            clickCollectOne()
+            rv_collect_non_coffee.visibility = VISIBLE
         }
     }
     private fun clickFrappuccino() {
-        menu3.setOnClickListener {
+        // 여기서,@GET("/favorite") 불러 온 뒤, 그 데이터를 가지고
+        // @GET("/Frappuccino")를 불러와야.
+
+        rectangle3.setOnClickListener {
             menu1.setImageResource(R.drawable.frappuccino)
             text1.setText("Frappuccino")
             clickCollectOne()
-        }
-        text3.setOnClickListener {
-            menu1.setImageResource(R.drawable.frappuccino)
-            text1.setText("Frappuccino")
-            clickCollectOne()
+            rv_collect_frappuccino.visibility = VISIBLE
         }
     }
 
     private fun clickCollectOne() {
-        menu1.isEnabled = false
-        text1.isEnabled = false
+        rectangle1.isEnabled = false
+        rectangle2.isEnabled = false
+        rectangle3.isEnabled = false
         rectangle2.visibility = INVISIBLE
         rectangle3.visibility = INVISIBLE
         menu2.visibility = INVISIBLE
@@ -136,13 +167,16 @@ class tab1 : Fragment() {
         text2.visibility = INVISIBLE
         text3.visibility = INVISIBLE
 
-        rv_collect.visibility = VISIBLE
+        rv_collect_coffee.visibility = INVISIBLE
+        rv_collect_non_coffee.visibility = INVISIBLE
+        rv_collect_frappuccino.visibility = INVISIBLE
         btn_back.visibility = VISIBLE
     }
 
     private fun clickBack() {
-        menu1.isEnabled = true
-        text1.isEnabled = true
+        rectangle1.isEnabled = true
+        rectangle2.isEnabled = true
+        rectangle3.isEnabled = true
         btn_back.visibility = INVISIBLE
         menu1.setImageResource(R.drawable.coffee)
         text1.setText("Coffee")
@@ -157,7 +191,9 @@ class tab1 : Fragment() {
         text2.visibility = VISIBLE
         text3.visibility = VISIBLE
 
-        rv_collect.visibility = INVISIBLE
+        rv_collect_coffee.visibility = INVISIBLE
+        rv_collect_non_coffee.visibility = INVISIBLE
+        rv_collect_frappuccino.visibility = INVISIBLE
     }
 
 
@@ -171,15 +207,19 @@ class tab1 : Fragment() {
         rv_favorite.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         rv_favorite.adapter = favoriteAdapter
 
-        // dummy data
-        for (i: Int in 1..10) {
-            favoriteItemList.add(
-                FavoriteItem(
-                    "레몬 아샷추 하핫",
-                    "샷2 + 레몬시럽1 + 복숭아티백 + 헤헤 + 호호"
-                )
-            )
-        }
+//        // dummy data
+//        for (i: Int in 1..10) {
+//            favoriteItemList.add(
+//                FavoriteItem(
+//                    "레몬 아샷추 하핫",
+//                    "샷2 + 레몬시럽1 + 복숭아티백 + 헤헤 + 호호",
+//                    "Coffee"
+//                )
+//            )
+//        }
+
+        // 여기서, @GET("/favorites")를 불러와야.
+        getDataTab1()
 
         toggle = binding.toggle
         toggle.setOnCheckedChangeListener { _, isChecked ->
@@ -187,6 +227,9 @@ class tab1 : Fragment() {
                 // 토글이 켜질 때
                 menu1.setImageResource(R.drawable.coffee)
                 text1.setText("Coffee")
+                rectangle1.isEnabled = false
+                rectangle2.isEnabled = false
+                rectangle3.isEnabled = false
                 rectangle1.visibility = INVISIBLE
                 rectangle2.visibility = INVISIBLE
                 rectangle3.visibility = INVISIBLE
@@ -198,12 +241,17 @@ class tab1 : Fragment() {
                 text3.visibility = INVISIBLE
 
                 rv_favorite.visibility = VISIBLE
-                rv_collect.visibility = INVISIBLE
+                rv_collect_coffee.visibility = INVISIBLE
+                rv_collect_non_coffee.visibility = INVISIBLE
+                rv_collect_frappuccino.visibility = INVISIBLE
                 btn_back.visibility = INVISIBLE
             } else {
                 // 토글이 꺼질 때
                 menu1.setImageResource(R.drawable.coffee)
                 text1.setText("Coffee")
+                rectangle1.isEnabled = true
+                rectangle2.isEnabled = true
+                rectangle3.isEnabled = true
                 rectangle1.visibility = VISIBLE
                 rectangle2.visibility = VISIBLE
                 rectangle3.visibility = VISIBLE
@@ -215,7 +263,9 @@ class tab1 : Fragment() {
                 text3.visibility = VISIBLE
 
                 rv_favorite.visibility = INVISIBLE
-                rv_collect.visibility = INVISIBLE
+                rv_collect_coffee.visibility = INVISIBLE
+                rv_collect_non_coffee.visibility = INVISIBLE
+                rv_collect_frappuccino.visibility = INVISIBLE
                 btn_back.visibility = INVISIBLE
             }
         }
@@ -223,20 +273,46 @@ class tab1 : Fragment() {
 
     private fun clickCategory() {
         // adapter와 연결
-        collectAdapter = FavoriteAdapter(collectItemList)
-        rv_collect = binding.rvCollectOne
-        // 가로로 스크롤 하도록
-        rv_collect.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        rv_collect.adapter = collectAdapter
+        collectAdapterCoffee = FavoriteAdapter(collectItemListCoffee)
+        collectAdapterNonCoffee = FavoriteAdapter(collectItemListNonCoffee)
+        collectAdapterFrappuccino = FavoriteAdapter(collectItemListFrappuccino)
+        rv_collect_coffee = binding.rvCollectCoffee
+        rv_collect_non_coffee = binding.rvCollectNonCoffee
+        rv_collect_frappuccino = binding.rvCollectFrappuccino
 
-        // dummy data
-        for (i: Int in 1..10) {
-            collectItemList.add(
-                FavoriteItem(
-                    "레몬 아샷추 하핫",
-                    "샷2 + 레몬시럽1 + 복숭아티백 + 헤헤 + 호호"
-                )
-            )
+        // 가로로 스크롤 하도록
+        rv_collect_coffee.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        rv_collect_coffee.adapter = collectAdapterCoffee
+        rv_collect_non_coffee.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        rv_collect_non_coffee.adapter = collectAdapterNonCoffee
+        rv_collect_frappuccino.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        rv_collect_frappuccino.adapter = collectAdapterFrappuccino
+
+//        // dummy data
+//        for (i: Int in 1..10) {
+//            collectItemList.add(
+//                FavoriteItem(
+//                    "레몬 아샷추 하핫",
+//                    "샷2 + 레몬시럽1 + 복숭아티백 + 헤헤 + 호호",
+//                    "Coffee"
+//                )
+//            )
+//        }
+
+        // favoriteItemList에서 골라서 채우기
+        Log.d("ohohohohoh", "이건 안 뜨냐?: $favoriteItemList")
+        for (item in favoriteItemList) {
+            if (item.category == "Coffee") {
+                Log.d(ContentValues.TAG, "Added items to collectItemListCoffee: $item")
+                collectItemListCoffee.add(item)
+                collectAdapterCoffee.notifyDataSetChanged()
+            } else if (item.category == "Non-Coffee") {
+                collectItemListNonCoffee.add(item)
+                collectAdapterNonCoffee.notifyDataSetChanged()
+            } else if (item.category == "Frappuccino") {
+                collectItemListFrappuccino.add(item)
+                collectAdapterFrappuccino.notifyDataSetChanged()
+            }
         }
 
         // favorite Coffee 눌렀을 때
@@ -251,6 +327,50 @@ class tab1 : Fragment() {
             clickBack()
         }
     }
+
+
+
+
+    private fun getDataTab1() {
+        // data를 받아서, collectItemList에 add하면 됨.
+        api.getFavorite("3259657340").enqueue(object : Callback<List<List<String>>> {
+            override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
+                if (response.isSuccessful) {
+                    Log.e(ContentValues.TAG, "네트워크 오류: dd")
+                    val result = response.body()
+                    result?.let{
+                        handleData(it)
+                    }
+                } else {
+                    // HTTP 요청이 실패한 경우의 처리
+                    Log.e(ContentValues.TAG, "HTTP 요청 실패: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<List<String>>>, t: Throwable) {
+                Log.e(ContentValues.TAG, "네트워크 오류: ${t.message}")
+            }
+        })
+    }
+    private fun handleData(data: List<List<String>>) {
+        for (record in data) {
+            val getname = record[2]
+            val getcustom = record[4]
+            val getcategory = record[1]
+            Log.d("plz name", "$getname")
+
+            // favoriteItem 형식으로 변환
+            val favoriteItem = FavoriteItem(getname, getcustom, getcategory)
+            Log.d(ContentValues.TAG, "Added items to collectItemList: $favoriteItem")
+            favoriteItemList.add(favoriteItem)
+            Log.d(ContentValues.TAG, "Added items to collectItemList: $favoriteItemList")
+            favoriteAdapter.notifyDataSetChanged()
+        }
+    }
+
+
+
+
 
     private fun getAllMyCustom() {
         myCustomAdapter = MyCustomAdapter(myCustomItemList)
@@ -268,6 +388,9 @@ class tab1 : Fragment() {
                 )
             )
         }
+
+        // 여기서,@GET("/mycustoms") 불러와야.
+        // creatornum을 가지고 판별하면 됨.
 
         btn_add = binding.btnAdd
         btn_add.setOnClickListener {
@@ -309,6 +432,12 @@ class tab1 : Fragment() {
 
             alertDialog.dismiss()
 
+            // 여기서는, @POST("/mycustoms")로 새로 추가된 애들을 불러가야 함.
+            // 그리고 각 메뉴에 따라서 사진을 바꿔야 할 것 같은데... 이 조건문도 다 써보긴 해야할 듯.
+            // name, menu, custom, description은 입력한 그대로
+            // category는 메뉴 보고 조건문 써서 입력
+            // creator, creatornum은 이 사람의 정보 그대로. 근데 불러오기도 해야하나?
+            // likes와 wish는 모두 0, O로 초기화.
             myCustomItemList.add(MyCustomsItem(newName, newMenu, newCustom, newLikes))
             myCustomAdapter.notifyDataSetChanged()
         }
@@ -393,6 +522,23 @@ class tab1 : Fragment() {
 
     companion object {
         private const val PHONE_ADD_REQUEST_CODE = 1
+    }
+
+    // 새로고침 로직
+    override fun onRefresh() {
+        favoriteItemList.clear()
+        myCustomItemList.clear()
+        collectItemListCoffee.clear()
+        collectItemListNonCoffee.clear()
+        collectItemListFrappuccino.clear()
+        initiation() // 모든 view들 정의
+        turnToggle() // Favorite Customs 구현 부분
+        getAllMyCustom() // My Customs 구현 부분
+        lifecycleScope.launch {
+            delay(1000)
+            clickCategory() // 각 카테고리 눌렀을 때 구현 부분
+        }
+        swipeRefreshLayout.isRefreshing = false
     }
 
 }
