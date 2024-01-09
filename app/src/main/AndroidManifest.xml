@@ -4,6 +4,7 @@
     package="com.heewoong.brewstar">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -16,16 +17,27 @@
         android:theme="@style/Theme.BrewStar"
         tools:targetApi="31">
         <activity
-            android:name=".SplashActivity"
-            android:exported="true"
-            android:label="BrewStar">
-
+            android:name=".Kotlinflask"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:exported="false"
+            android:label="BrewStar">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -58,12 +70,14 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"
-            >
+            android:exported="false">
             <intent-filter>
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+                <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+
 
                 <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
                 <!-- scheme-example: "kakao{NATIVE_APP_KEY}" -->

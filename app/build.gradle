@@ -58,6 +58,14 @@ dependencies {
     implementation "com.kakao.sdk:v2-friend:2.19.0" // 카카오톡 소셜 피커, 리소스 번들 파일 포함
     implementation "com.kakao.sdk:v2-navi:2.19.0" // 카카오내비
     implementation "com.kakao.sdk:v2-cert:2.19.0" // 카카오 인증서비스
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+//    implementation "com.google.code.gson:gson:2.8.6"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+
+
+
     // 2.8.4 옛날버전도 해보기
 
 //    implementation "com.github.bumptect.glide:glide:4.12.0"
