@@ -53,6 +53,7 @@ class FavoriteAdapter (private var FavoriteItemList: ArrayList<MyCustomsItem>) :
             view.findViewById<TextView>(R.id.popuplikes).setText(oldLikes)
             view.findViewById<TextView>(R.id.editPopupDescription).setText(oldDescription)
             view.findViewById<TextView>(R.id.popupMadeBy).setText(oldCreator)
+            view.findViewById<ImageView>(R.id.popupStar).setImageResource(R.drawable.like2)
             if (oldCategory == "Coffee") {
                 view.findViewById<ImageView>(R.id.popupImage).setImageResource(R.drawable.coffee)
             } else if (oldCategory == "Non-Coffee") {

@@ -29,7 +29,7 @@ interface RetrofitInterface {
     fun getMyCustom(@Query("userId") parameter: String): Call<List<List<String>>>
 
     @GET("/allCustoms")
-    fun getAllCustoms(@Query("userId") parameter: String): Call<List<List<String>>>
+    fun getAllCustoms(): Call<List<List<String>>>
 
     @FormUrlEncoded
     @POST("/addCustom")
