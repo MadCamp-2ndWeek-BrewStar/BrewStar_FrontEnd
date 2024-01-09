@@ -28,6 +28,28 @@ class FavoriteAdapter (private var FavoriteItemList: ArrayList<FavoriteItem>) :
             // wish = X로 바꾸기
             removeMyCustomItem(position)
         }
+        
+        // 뷰카드 누르면 상세정보 뜨기
+        holder.viewCard.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(holder.itemView.context, R.style.AlertDialogTheme)
+            var bindingPopup = ActivityCustomDescriptionBinding.inflate(LayoutInflater.from(holder.itemView.context))
+            val view: View = bindingPopup.layoutPopupDescription
+
+            builder.setView(view)
+
+            val alertDialog: AlertDialog = builder.create()
+
+            // close 버튼 누르면 다시 돌아가기
+            view.findViewById<ImageButton>(R.id.popupCloseBtn).setOnClickListener {
+                alertDialog.dismiss()
+            }
+
+            // 다이얼로그 형태 지우기
+            if (alertDialog.window != null) {
+                alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+            }
+            alertDialog.show()
+        }
 
         // 전체 네모 버튼을 눌렀을 때도 상세정보 보기 해야하나?
     }
@@ -49,39 +71,19 @@ class FavoriteAdapter (private var FavoriteItemList: ArrayList<FavoriteItem>) :
         val tv_custom = favoriteItemView.findViewById<TextView>(R.id.tv_favorite_custom)
         val btn_like = favoriteItemView.findViewById<ImageButton>(R.id.btn_like)
         val viewCard = favoriteItemView.findViewById<ImageView>(R.id.favorite_rectangle)
+        val picture = favoriteItemView.findViewById<ImageView>(R.id.iv_favorite_menu)
 
         // item의 name, menu, custom, likes를 할당해주는 함수
         fun bind(item: FavoriteItem) {
             tv_name.text = item.name
             tv_custom.text = item.custom
-        }
-
-        init {
-            viewCard.setOnClickListener {
-                showCustomDescription()
+            if (item.category == "Coffee") {
+                picture.setImageResource(R.drawable.coffee)
+            } else if (item.category == "Non-Coffee") {
+                picture.setImageResource(R.drawable.noncoffee)
+            } else {
+                picture.setImageResource(R.drawable.frappuccino)
             }
         }
-
-        private fun showCustomDescription() {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(itemView.context, R.style.AlertDialogTheme)
-            bindingPopup = ActivityCustomDescriptionBinding.inflate(LayoutInflater.from(context))
-            val view: View = bindingPopup.layoutPopupDescription
-
-            builder.setView(view)
-
-            val alertDialog: AlertDialog = builder.create()
-
-            // close 버튼 누르면 다시 돌아가기
-            view.findViewById<ImageButton>(R.id.popupCloseBtn).setOnClickListener {
-                alertDialog.dismiss()
-            }
-
-            // 다이얼로그 형태 지우기
-            if (alertDialog.window != null) {
-                alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-            }
-            alertDialog.show()
-        }
-
     }
 }

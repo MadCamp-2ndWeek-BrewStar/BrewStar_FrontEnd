@@ -4,87 +4,83 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp">
+    android:paddingHorizontal="16dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/showDescription"
+    <ImageView
+        android:id="@+id/top10_rectangle"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/top10_rectangle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/customPic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/coffee"
+        app:layout_constraintBottom_toBottomOf="@+id/top10_rectangle"
+        app:layout_constraintStart_toStartOf="@+id/top10_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/top10_rectangle" />
+
+    <TextView
+        android:id="@+id/customName"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:text="레몬 아샷추"
+        android:textAlignment="center"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/top10_rectangle"
+        app:layout_constraintStart_toEndOf="@+id/customPic"
+        app:layout_constraintTop_toTopOf="@+id/top10_rectangle" />
+
+    <TextView
+        android:id="@+id/customOption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:cardCornerRadius="20dp"
+        android:text="샷2+ 레몬시럽1+복숭아티백"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/customName"
+        app:layout_constraintTop_toTopOf="@+id/customName" />
 
-        >
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:background="@color/light_green"
-            android:orientation="horizontal"
-            >
+    <TextView
+        android:id="@+id/customCreator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="\@oliheilnany_"
+        android:textSize="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/customName"
+        app:layout_constraintStart_toEndOf="@+id/customName" />
 
-            <ImageView
-                android:id="@+id/customPic"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:src="@drawable/coffee" />
+    <ImageView
+        android:id="@+id/likePic"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/small_star"
+        app:layout_constraintBottom_toBottomOf="@+id/likes"
+        app:layout_constraintEnd_toStartOf="@+id/likes"
+        app:layout_constraintTop_toTopOf="@+id/likes" />
 
-            <TextView
-                android:id="@+id/customName"
-                android:layout_width="120dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:text="레몬 아샷추"
-                android:textSize="22dp"
-                android:textStyle="bold" />
+    <TextView
+        android:id="@+id/likes"
+        android:layout_width="32dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="10dp"
+        android:text="100"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/top10_rectangle"
+        app:layout_constraintEnd_toEndOf="@+id/top10_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/top10_rectangle" />
 
-            <LinearLayout
-                android:layout_width="180dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/customOption"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="샷2+ 레몬시럽1+복숭아티백"
-                    android:textSize="13dp" />
-
-                <TextView
-                    android:id="@+id/customCreator"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="\@Oliheilnany_"
-                    android:textSize="10dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/likePic"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/star" />
-
-                <TextView
-                    android:id="@+id/likes"
-                    android:layout_width="32dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="2dp"
-                    android:text="100"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
