@@ -10,13 +10,15 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.heewoong.brewstar.databinding.ActivityMyCustomEditBinding
+import com.heewoong.brewstar.databinding.ActivityMyCustomAddBinding
+import java.util.Collections
 
 class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
         RecyclerView.Adapter<MyCustomAdapter.MyCustomViewHolder>() {
 
     override fun onCreateViewHolder( parent: ViewGroup, viewType: Int ): MyCustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.tab1_mycustom_recyclerview, parent, false)
+        val context = parent.context
         return MyCustomViewHolder(view)
     }
 
@@ -26,8 +28,18 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
         // 수정 버튼을 누르면 수정 창으로 넘어가기
         // 여기서 데이터들 다 받아와서 list에 반영까지 다 하기
         holder.btn_edit.setOnClickListener {
+
+            // 하지만 나중에는, 수정 버튼을 눌렀을 때 데이터베이스에서 모든 정보가 불러와져야 함
+            // 임시로 지금 나는 이미 적혀있는 내용들을 불러왔을 뿐, 원래는 데이터베이스에서 정보를 불러와야!
+            // 이건 id를 이용해서 불러올 수 있을 것 같음.
+            // 또는, name, menu, custom을 통해서 불러올 수 있지 않을까 싶다. 똑같은 건 추가 안된다는 가정하에.
+            // 그걸 불러와서, 수정 창에는 name/menu/custom/description/creator/likes/wish까지 모두 불러와지겠지.
+            // 내가 내 걸 좋아요 누를 수도 있는 거니까! 아니 근데 좋아요 못 누르는 걸로 하자 일단은 ㅎ
+            // 어쨌든 My Customs에는, creator이 자기 자신인 경우만 리스트 해두면 됨.
+
             val builder: AlertDialog.Builder = AlertDialog.Builder(holder.itemView.context, R.style.AlertDialogTheme)
-            var bindingPopup = ActivityMyCustomEditBinding.inflate(LayoutInflater.from(holder.itemView.context))
+//            var bindingPopup = ActivityMyCustomEditBinding.inflate(LayoutInflater.from(holder.itemView.context))
+            var bindingPopup = ActivityMyCustomAddBinding.inflate(LayoutInflater.from(holder.itemView.context))
             val view: View = bindingPopup.layoutPopup
 
             val oldName: String = holder.tv_name.text.toString()
@@ -56,6 +68,11 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
 
             // save 버튼 누르면 추가되기
             view.findViewById<Button>(R.id.popupSaveBtn).setOnClickListener {
+                
+                // 이것도 원래 데이터베이스에서 이러한 걸 수정하는 쿼리문을 만들어서 그걸 반영해야 할 듯.
+                // 이건 해봤자 name, menu, custom, description만 수정하는 거니까!
+                // 좋아요도 수정하는 건... 그건 save와는 별개로 쳐야하나. 일단은 빼고 생각하자.
+                
                 newName += view.findViewById<EditText>(R.id.editPopupName).text.toString()
                 newMenu += view.findViewById<EditText>(R.id.editPopupMenu).text.toString()
                 newCustom += view.findViewById<EditText>(R.id.editPopupCustom).text.toString()
@@ -84,10 +101,22 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
     }
 
     // recyclerView 중 하나의 항목 삭제하는 함수
-    private fun removeMyCustomItem(position: Int) {
+    fun removeMyCustomItem(position: Int) {
+        // 아하 삭제 기능 구현해야 하는데. 슬라이드 해서 삭제하는 방식으로 가야겠다.
         myCustomItemList.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, itemCount)
+    }
+
+    // 데이터 전체 값 갱신
+    private fun setMyCustomItem(myCustomItemList: ArrayList<MyCustomsItem>) {
+        this.myCustomItemList = myCustomItemList
+        notifyDataSetChanged()
+    }
+
+    fun swapData(fromPos: Int, toPos: Int) {
+        Collections.swap(myCustomItemList, fromPos, toPos)
+        notifyItemMoved(fromPos, toPos)
     }
 
     inner class MyCustomViewHolder(myCustomItemView: View) : RecyclerView.ViewHolder(myCustomItemView) {
