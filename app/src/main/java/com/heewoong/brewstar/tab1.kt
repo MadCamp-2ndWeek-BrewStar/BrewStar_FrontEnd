@@ -1,6 +1,8 @@
 package com.heewoong.brewstar
 
 import android.app.AlertDialog
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +15,9 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ToggleButton
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.heewoong.brewstar.databinding.ActivityMyCustomAddBinding
@@ -51,6 +55,7 @@ class tab1 : Fragment() {
     //popup창을 위한 준비들
     private lateinit var bindingPopup: ActivityMyCustomAddBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -61,9 +66,17 @@ class tab1 : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentTab1Binding.inflate(inflater, container, false)
-        turnToggle()
-        getAllMyCustom()
+        initiation() // 모든 view들 정의
+        turnToggle() // Favorite Customs 구현 부분
+        getAllMyCustom() // My Customs 구현 부분
+        clickCategory() // 각 카테고리 눌렀을 때 구현 부분
 
+        
+        return binding.root
+    }
+
+    
+    private fun initiation() {
         rectangle1 = binding.favoriteRectangleCoffee
         rectangle2 = binding.favoriteRectangleNoncoffee
         rectangle3 = binding.favoriteRectangleFrappuccino
@@ -74,23 +87,9 @@ class tab1 : Fragment() {
         text2 = binding.tvFavoriteMenuNoncoffee
         text3 = binding.tvFavoriteMenuFrappuccino
         btn_back = binding.btnBack
+    }
 
-        collectAdapter = FavoriteAdapter(collectItemList)
-        rv_collect = binding.rvCollectOne
-        // 가로로 스크롤 하도록
-        rv_collect.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        rv_collect.adapter = collectAdapter
-
-        for (i: Int in 1..10) {
-            collectItemList.add(
-                FavoriteItem(
-                    "레몬 아샷추 하핫",
-                    "샷2 + 레몬시럽1 + 복숭아티백 + 헤헤 + 호호"
-                )
-            )
-        }
-        
-        // favorite Coffee 눌렀을 때
+    private fun clickCoffee() {
         menu1.setOnClickListener {
             menu1.setImageResource(R.drawable.coffee)
             text1.setText("Coffee")
@@ -101,8 +100,8 @@ class tab1 : Fragment() {
             text1.setText("Coffee")
             clickCollectOne()
         }
-        
-        // favorite Non Coffee 눌렀을 때
+    }
+    private fun clickNonCoffee() {
         menu2.setOnClickListener {
             menu1.setImageResource(R.drawable.noncoffee)
             text1.setText("Non Coffee")
@@ -113,8 +112,8 @@ class tab1 : Fragment() {
             text1.setText("Non Coffee")
             clickCollectOne()
         }
-        
-        // favorite Frappuccino 눌렀을 때
+    }
+    private fun clickFrappuccino() {
         menu3.setOnClickListener {
             menu1.setImageResource(R.drawable.frappuccino)
             text1.setText("Frappuccino")
@@ -125,16 +124,7 @@ class tab1 : Fragment() {
             text1.setText("Frappuccino")
             clickCollectOne()
         }
-
-        // 다시 back버튼 누르면
-        btn_back.setOnClickListener {
-            clickBack()
-        }
-
-        
-        return binding.root
     }
-
 
     private fun clickCollectOne() {
         menu1.isEnabled = false
@@ -172,15 +162,16 @@ class tab1 : Fragment() {
 
 
     private fun turnToggle() {
+        
+        // recyclerview 정의 및 adapter 연결
         rv_favorite = binding.rvFavorite
-
-
         favoriteAdapter = FavoriteAdapter(favoriteItemList)
         rv_favorite = binding.rvFavorite
         // 가로로 스크롤 하도록
         rv_favorite.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         rv_favorite.adapter = favoriteAdapter
 
+        // dummy data
         for (i: Int in 1..10) {
             favoriteItemList.add(
                 FavoriteItem(
@@ -189,8 +180,6 @@ class tab1 : Fragment() {
                 )
             )
         }
-
-
 
         toggle = binding.toggle
         toggle.setOnCheckedChangeListener { _, isChecked ->
@@ -232,6 +221,37 @@ class tab1 : Fragment() {
         }
     }
 
+    private fun clickCategory() {
+        // adapter와 연결
+        collectAdapter = FavoriteAdapter(collectItemList)
+        rv_collect = binding.rvCollectOne
+        // 가로로 스크롤 하도록
+        rv_collect.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        rv_collect.adapter = collectAdapter
+
+        // dummy data
+        for (i: Int in 1..10) {
+            collectItemList.add(
+                FavoriteItem(
+                    "레몬 아샷추 하핫",
+                    "샷2 + 레몬시럽1 + 복숭아티백 + 헤헤 + 호호"
+                )
+            )
+        }
+
+        // favorite Coffee 눌렀을 때
+        clickCoffee()
+        // favorite Non Coffee 눌렀을 때
+        clickNonCoffee()
+        // favorite Frappuccino 눌렀을 때
+        clickFrappuccino()
+
+        // 다시 back버튼 누르면
+        btn_back.setOnClickListener {
+            clickBack()
+        }
+    }
+
     private fun getAllMyCustom() {
         myCustomAdapter = MyCustomAdapter(myCustomItemList)
         rv_mycustom = binding.rvMycustom
@@ -255,9 +275,14 @@ class tab1 : Fragment() {
 //            val intent = Intent(activity, MyCustomAdd::class.java)
 //            startActivityForResult(intent, PHONE_ADD_REQUEST_CODE)
         }
+
+        itemTouch()
+
     }
 
     private fun showCustomDialog() {
+        
+        // 이건 add 했을 때에 뜨는 창
         val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
         bindingPopup = ActivityMyCustomAddBinding.inflate(layoutInflater)
         val view: View = bindingPopup.layoutPopup
@@ -293,6 +318,76 @@ class tab1 : Fragment() {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
         }
         alertDialog.show()
+    }
+
+    // 스와이프해서 삭제
+    private fun itemTouch() {
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val fromPos: Int = viewHolder.adapterPosition
+                val toPos: Int = target.adapterPosition
+                myCustomAdapter.swapData(fromPos, toPos)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                myCustomAdapter.removeMyCustomItem(viewHolder.layoutPosition)
+            }
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                // 배경색 변경을 위한 로직 추가
+                val itemView = viewHolder.itemView
+                val background = ColorDrawable(Color.WHITE)
+                val icon = ContextCompat.getDrawable(requireContext(), R.drawable.remove)
+
+                if (dX < 0) {
+                    background.setBounds(
+                        itemView.right + dX.toInt(),
+                        itemView.top,
+                        itemView.right,
+                        itemView.bottom
+                    )
+                    background?.draw(c)
+
+                    // 아이콘 크기 설정
+                    val iconSizeInDp = 48
+                    val iconSizeInPx = (iconSizeInDp * resources.displayMetrics.density).toInt()
+
+                    // 아이콘 위치 설정
+                    // icon?.intrinsicHight!! 대신 iconSizeInPx를 넣음
+                    // icon을 배경 오른쪽 중앙에 넣음
+                    val iconMargin = (itemView.height - iconSizeInPx) / 2
+                    val iconTop = itemView.top + (itemView.height - iconSizeInPx) / 2
+                    val iconRight = itemView.right - iconMargin
+                    val iconLeft = iconRight - iconSizeInPx
+                    val iconBottom = iconTop + iconSizeInPx
+
+                    icon?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                    icon?.draw(c)
+
+                } else {
+                    background.setBounds(0, 0, 0, 0)
+                }
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            }
+        }
+
+        ItemTouchHelper(itemTouchCallback).attachToRecyclerView(rv_mycustom)
     }
 
 
