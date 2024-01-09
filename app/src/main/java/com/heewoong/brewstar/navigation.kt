@@ -1,14 +1,15 @@
 package com.heewoong.brewstar
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import com.heewoong.brewstar.ui.main.SectionsPagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import com.heewoong.brewstar.databinding.ActivityNavigationBinding
+import com.heewoong.brewstar.ui.main.SectionsPagerAdapter
 import com.kakao.sdk.user.UserApiClient
 
 class navigation : AppCompatActivity() {
@@ -34,6 +35,11 @@ class navigation : AppCompatActivity() {
                     Log.e(ContentValues.TAG, "로그아웃 실패, SDK에서 토큰 삭제됨", error)
                 } else {
                     Log.e(ContentValues.TAG, "로그아웃 성공, SDK에서 토큰 삭제됨")
+                    val sharedPref = getSharedPreferences("getTokenId", Context.MODE_PRIVATE)
+                    val editor = sharedPref.edit()
+                    // 데이터 저장
+                    editor.putString("tokenId", "")
+                    editor.apply() // 변경 사항을 저장
                 }
             }
             val intent = Intent(this, MainActivity::class.java)

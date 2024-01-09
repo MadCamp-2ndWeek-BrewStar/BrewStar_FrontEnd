@@ -2,6 +2,7 @@ package com.heewoong.brewstar
 
 import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -78,6 +79,9 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     // 스와이프해서 새로고침 구현
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
+    // 토큰 아이디
+    private lateinit var tokenId: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +91,10 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        // 토큰 얻기
+        val sharedPref = requireContext().getSharedPreferences("getTokenId", Context.MODE_PRIVATE)
+        tokenId = sharedPref.getString("tokenId", "")!!
 
         // Inflate the layout for this fragment
         binding = FragmentTab1Binding.inflate(inflater, container, false)
@@ -516,7 +524,7 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     // favorite 누른 애들
     private fun getTab1Favorite() {
         // data를 받아서, favoriteItemList에 add하면 됨.
-        api.getFavorite("3259657340").enqueue(object : Callback<List<List<String>>> {
+        api.getFavorite(tokenId!!).enqueue(object : Callback<List<List<String>>> {
             override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
                 if (response.isSuccessful) {
                     Log.e(ContentValues.TAG, "네트워크 오류: dd")
@@ -560,7 +568,7 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     // My Customs 받기
     private fun getTab1MyCustoms() {
         // data를 받아서, myCustomItemList에 add하면 됨.
-        api.getMyCustom("3259657340").enqueue(object : Callback<List<List<String>>> {
+        api.getMyCustom(tokenId!!).enqueue(object : Callback<List<List<String>>> {
             override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
                 if (response.isSuccessful) {
                     Log.e(ContentValues.TAG, "네트워크 오류: dd")

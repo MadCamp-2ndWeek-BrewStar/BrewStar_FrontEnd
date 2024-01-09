@@ -1,9 +1,11 @@
 package com.heewoong.brewstar
 
 import android.content.ContentValues
-import java.util.*
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -115,12 +117,21 @@ class MainActivity : AppCompatActivity() {
                                     "\n회원번호: ${tokenInfo.id}" +
                                     "\n만료시간: ${tokenInfo.expiresIn} 초"
                         )
+                            // SharedPreferences 객체 가져오기
+                            val sharedPref = getSharedPreferences("getTokenId", Context.MODE_PRIVATE)
+                            val editor = sharedPref.edit()
+                            // 데이터 저장
+                            editor.putString("tokenId", "${tokenInfo.id}")
+                            editor.apply() // 변경 사항을 저장
                     }
                 }
-
-                val intent = Intent(this, navigation::class.java)
-                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                finish()
+                // 결국에는 화면에 전환되는 과정 후에 토큰 정보가 불러와져서, 그래서 전환된 화면에
+                // 토큰이 전달이 안 되었던 것인듯.
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, navigation::class.java)
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                    finish()
+                }, 1000)
             }
         }
         // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
@@ -144,7 +155,9 @@ class MainActivity : AppCompatActivity() {
                     // 로그인 성공 부분
                     //Log.e(TAG, "로그인 성공 ${token.accessToken}")
                     Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
-                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                    }, 1000)
                     UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
                         if (error != null) {
                             Log.e(ContentValues.TAG, "토큰 정보 가져오기 실패 $error")
@@ -154,6 +167,12 @@ class MainActivity : AppCompatActivity() {
                                         "\n회원번호: ${tokenInfo.id}" +
                                         "\n만료시간: ${tokenInfo.expiresIn} 초"
                             )
+                            // SharedPreferences 객체 가져오기
+                            val sharedPref = getSharedPreferences("getTokenId", Context.MODE_PRIVATE)
+                            val editor = sharedPref.edit()
+                            // 데이터 저장
+                            editor.putString("tokenId", "${tokenInfo.id}")
+                            editor.apply() // 변경 사항을 저장
                         }
                     }
                     finish()
