@@ -16,4 +16,5 @@
     <string name="title_activity_navigation">navigation</string>
     <string name="tab_text_1">My Page</string>
     <string name="tab_text_2">All Customs</string>
+    <string name="baseUrl">http://localhost:5000</string>
 </resources>
