@@ -1,7 +1,9 @@
 package com.heewoong.brewstar
 
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +12,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.heewoong.brewstar.databinding.ActivityCustomDescriptionBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class FavoriteAdapter (private var FavoriteItemList: ArrayList<MyCustomsItem>) :
         RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
+
+    // 서버에서 불러오기
+    val api = RetrofitInterface.create()
+    // 토큰 아이디
+    private lateinit var tokenId: String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int ): FavoriteViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.tab1_favorite_recyclerview, parent, false)
@@ -21,12 +31,34 @@ class FavoriteAdapter (private var FavoriteItemList: ArrayList<MyCustomsItem>) :
 
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
         holder.bind(FavoriteItemList[position])
+        val sharedPref = holder.itemView.context.getSharedPreferences("getTokenId", Context.MODE_PRIVATE)
+        tokenId = sharedPref.getString("tokenId", "")!!
+        val customId = FavoriteItemList[position].customid
 
 //         별 버튼 누르면 리스트에서 빠지기
         holder.btn_like.setOnClickListener {
 //            holder.btn_like.setImageResource(R.drawable.unlike)
             // wish = X로 바꾸기
-            removeMyCustomItem(position)
+            Log.d("여기에 안 들어가나", "여기에 안 들어가나")
+            Log.d("여기에 안 들어가나", tokenId)
+            Log.d("여기에 안 들어가나", customId)
+            val call = api.likeCustom(tokenId, customId)
+            call.enqueue(object: Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.e("Lets go", "success!! good!!")
+                    } else {
+                        Log.e("Lets go", "what's wrong...")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e("mad..nn", "so sad plz")
+                }
+            })
+            holder.btn_like.setImageResource(R.drawable.unlike)
+
+//            removeMyCustomItem(position)
         }
         
         // 뷰카드 누르면 상세정보 뜨기
@@ -38,6 +70,7 @@ class FavoriteAdapter (private var FavoriteItemList: ArrayList<MyCustomsItem>) :
 
             // activity의 각 요소들을 원래 data들로 채우는 과정
             val favoriteItemOne = FavoriteItemList[position]
+            val oldCustomId: String = favoriteItemOne.customid
             val oldName: String = favoriteItemOne.name
             val oldMenu: String = favoriteItemOne.menu
             val oldCustom: String = favoriteItemOne.custom
