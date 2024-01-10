@@ -80,4 +80,4 @@
 ---
 
 ## 📁 Resources
-- APK file : https://drive.google.com/file/d/1n5rj19rOMKxKWVLpkJg9vBp67HwSLSEq/view?usp=sharing
+- APK file : https://drive.google.com/file/d/1J1PQ0fvIpA3LQc9COHur7n9mD5tEZmQB/view?usp=sharing
