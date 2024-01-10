@@ -31,6 +31,9 @@ interface RetrofitInterface {
     @GET("/allCustoms")
     fun getAllCustoms(): Call<List<List<String>>>
 
+    @GET("/getNickname")
+    fun getNickname(@Query("tokenId") parameter: String): Call<String>
+
     @FormUrlEncoded
     @POST("/addCustom")
     fun addCustom(
@@ -41,6 +44,37 @@ interface RetrofitInterface {
         @Field("Description") Description: String,
         @Field("creator") creator: String,
         @Field("creatornum") creatornum: String
+    ): Call<Void>
+
+    @FormUrlEncoded
+    @POST("/editCustom")
+    fun editCustom(
+        @Field("customId") customId: String,
+        @Field("name") name: String,
+        @Field("menu") menu: String,
+        @Field("category") category: String,
+        @Field("custom") custom: String,
+        @Field("Description") Description: String
+    ): Call<Void>
+
+    @FormUrlEncoded
+    @POST("/deleteCustom")
+    fun deleteCustom(
+        @Field("customId") customId: String
+    ): Call<Void>
+
+    @FormUrlEncoded
+    @POST("/addUser")
+    fun addUser(
+        @Field("tokenId") tokenId: String,
+        @Field("nickname") nickname: String
+    ): Call<Void>
+
+    @FormUrlEncoded
+    @POST("/likeCustom")
+    fun likeCustom(
+        @Field("userId") userId: String,
+        @Field("customId") customId: String
     ): Call<Void>
 
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.

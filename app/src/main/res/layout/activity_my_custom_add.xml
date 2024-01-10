@@ -230,7 +230,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:background="@android:color/transparent"
-        android:text="Made By. @oliheilnany_"
+        android:text=""
         android:textAlignment="textEnd"
         android:textColor="@color/light_green"
         android:textSize="10sp"
