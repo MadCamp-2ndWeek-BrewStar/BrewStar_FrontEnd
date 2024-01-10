@@ -98,6 +98,25 @@ class FavoriteAdapter (private var FavoriteItemList: ArrayList<MyCustomsItem>) :
             // builder create
             val alertDialog: AlertDialog = builder.create()
 
+            view.findViewById<ImageView>(R.id.popupStar).setOnClickListener {
+                // 큰 화면에서 좋아요 누른 걸 취소한거면,
+                val call = api.likeCustom(tokenId, customId)
+                call.enqueue(object: Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            Log.e("Lets go", "success!! good!!")
+                        } else {
+                            Log.e("Lets go", "what's wrong...")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.e("mad..nn", "so sad plz")
+                    }
+                })
+                view.findViewById<ImageView>(R.id.popupStar).setImageResource(R.drawable.unlike)
+            }
+
             // close 버튼 누르면 다시 돌아가기
             view.findViewById<ImageButton>(R.id.popupCloseBtn).setOnClickListener {
                 alertDialog.dismiss()

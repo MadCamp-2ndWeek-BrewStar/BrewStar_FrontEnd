@@ -406,7 +406,7 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         var newLikes: String = "0"
         var newCategory: String = "Coffee"
         var newDescription: String = ""
-        var newCreator: String = user
+        //var newCreator: String = user
         var newCreatornum: String = tokenId
 
         // save 버튼 누르면 추가되기
@@ -438,20 +438,23 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             // category는 메뉴 보고 조건문 써서 입력
             // creator, creatornum은 이 사람의 정보 그대로. 근데 불러오기도 해야하나?
             // likes와 wish는 모두 0, O로 초기화.
-            val call = api.addCustom(newName, newMenu, newCategory, newCustom, newDescription, newCreator, newCreatornum)
-            call.enqueue(object: Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Log.e("Lets go", "success!! good!!")
-                    } else {
-                        Log.e("Lets go", "what's wrong...")
-                    }
-                }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.e("mad..nn", "so sad plz")
-                }
-            })
+            Handler(Looper.getMainLooper()).postDelayed({
+                val call = api.addCustom(newName, newMenu, newCategory, newCustom, newDescription, user, newCreatornum)
+                call.enqueue(object: Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            Log.e("Lets go", "success!! good!!")
+                        } else {
+                            Log.e("Lets go", "what's wrong...")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.e("mad..nn", "so sad plz")
+                    }
+                })
+            }, 100)
 //            add 되고 나서 새로고침하면 자동으로 추가될 것임
 //            myCustomItemList.add(MyCustomsItem(newName, newMenu, newCustom, newLikes, newCategory, newDescription, newCreator))
 //            myCustomAdapter.notifyDataSetChanged()
