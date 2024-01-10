@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
+import java.util.Locale
 
 class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var recyclerView: RecyclerView
@@ -37,7 +37,7 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     val categoryList2 = listOf("Recommend", "Recent")
     private var selectedList = ArrayList<CustomItem>()
     var selectPosition: Int = 0
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+//    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     val api = RetrofitInterface.create()
     private lateinit var selectedCategory : String
 
@@ -51,8 +51,8 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             setContentView(binding.root)
         }
 
-        swipeRefreshLayout = binding.swipeLayout
-        swipeRefreshLayout.setOnRefreshListener(this)
+//        swipeRefreshLayout = binding.swipeLayout
+//        swipeRefreshLayout.setOnRefreshListener(this)
     }
 
     private fun doingMain() {
@@ -70,10 +70,10 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         categorySpinner.adapter = adapter
 
-        categorySpinner2 = binding.categoryDropdown2
-        val adapter2 : ArrayAdapter<String> = ArrayAdapter(this@ViewCustoms, android.R.layout.simple_list_item_1, categoryList2)
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        categorySpinner2.adapter = adapter2
+//        categorySpinner2 = binding.categoryDropdown2
+//        val adapter2 : ArrayAdapter<String> = ArrayAdapter(this@ViewCustoms, android.R.layout.simple_list_item_1, categoryList2)
+//        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        categorySpinner2.adapter = adapter2
 
         supportActionBar?.hide()
 
@@ -196,6 +196,6 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         doingMain()
 
         categorySpinner.setSelection(selectPosition)
-        swipeRefreshLayout.isRefreshing = false
+//        swipeRefreshLayout.isRefreshing = false
     }
 }

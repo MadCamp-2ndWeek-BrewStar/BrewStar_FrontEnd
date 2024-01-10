@@ -16,7 +16,6 @@ import com.heewoong.brewstar.databinding.FragmentTab2Binding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.ArrayList
 
 
 class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -56,7 +55,7 @@ class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-        getTab2()
+        getTab2() // All customs
 
         topTenAdapter = topTenAdapter(requireContext(), customItemList)
 
@@ -84,7 +83,7 @@ class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    // favorite 누른 애들
+    // All customs 받아오기
     private fun getTab2() {
         // data를 받아서, favoriteItemList에 add하면 됨.
         api.getAllCustoms("Recommend").enqueue(object : Callback<List<List<String>>> {
@@ -132,6 +131,7 @@ class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
         }
     }
+
 
 
     override fun onRefresh() {

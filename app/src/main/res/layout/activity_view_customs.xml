@@ -1,57 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ViewCustoms">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/contact_title"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="30dp"
-            android:text="All Customs"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:gravity="center"
-            tools:layout_editor_absoluteX="157dp" />
-        <EditText
-            android:id="@+id/editSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/searchrect"
-            android:ems="10"
-            android:hint="Search"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:paddingStart="40dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/contact_title" />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/editSearch"
-            app:layout_constraintTop_toTopOf="@id/editSearch"
-            app:layout_constraintBottom_toBottomOf="@id/editSearch"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/searchicon"
-            />
+            android:layout_height="wrap_content">
 
-        <LinearLayout
+            <TextView
+                android:id="@+id/contact_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp"
+                android:gravity="center"
+                android:text="All Customs"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="157dp" />
+
+            <EditText
+                android:id="@+id/editSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/searchrect"
+                android:ems="10"
+                android:hint="Search"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:paddingStart="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/contact_title" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/searchicon"
+                app:layout_constraintBottom_toBottomOf="@id/editSearch"
+                app:layout_constraintStart_toStartOf="@id/editSearch"
+                app:layout_constraintTop_toTopOf="@id/editSearch" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/categoryDropdownLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,29 +69,34 @@
                 android:id="@+id/categoryDropdown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:layout_marginEnd="10dp"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <Spinner
-                android:id="@+id/categoryDropdown2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
+<!--            <Spinner-->
+<!--                android:id="@+id/categoryDropdown2"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:spinnerMode="dropdown" />-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            app:layout_constraintTop_toBottomOf="@id/categoryDropdownLayout">
+            app:layout_constraintTop_toBottomOf="@+id/categoryDropdownLayout">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:overScrollMode="never" />
+                android:overScrollMode="never"
+                tools:listitem="@layout/view_custom_menu_item" />
 
         </RelativeLayout>
+    </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</FrameLayout>

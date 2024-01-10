@@ -43,39 +43,51 @@
 
     <TextView
         android:id="@+id/customName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
+        android:layout_marginEnd="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="레몬아샷추"
         android:textColor="@color/dark"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/iv_mycustom_star"
         app:layout_constraintStart_toEndOf="@+id/iv_mycustom_circle"
         app:layout_constraintTop_toTopOf="@+id/iv_mycustom_circle" />
 
     <TextView
         android:id="@+id/menu"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="Iced Caffe Americano"
         android:textColor="#FF7B7E79"
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/customOption"
+        app:layout_constraintEnd_toEndOf="@+id/customName"
         app:layout_constraintStart_toEndOf="@+id/iv_mycustom_circle"
         app:layout_constraintTop_toBottomOf="@+id/customName" />
 
     <TextView
         android:id="@+id/customOption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginBottom="7dp"
         android:text="샷2 + 레몬시럽1 + 복숭아티백"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/dark"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_mycustom_circle"
+        app:layout_constraintEnd_toStartOf="@+id/iv_mycustom_star"
         app:layout_constraintStart_toEndOf="@+id/iv_mycustom_circle" />
 
 
@@ -83,23 +95,27 @@
         android:id="@+id/iv_mycustom_star"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="40dp"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
         android:src="@drawable/mycustom_star"
         app:layout_constraintBottom_toBottomOf="@+id/likes"
-        app:layout_constraintEnd_toStartOf="@+id/likes"
+        app:layout_constraintEnd_toEndOf="@+id/custom_rectangle"
         app:layout_constraintTop_toTopOf="@+id/likes" />
 
     <TextView
         android:id="@+id/likes"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginEnd="10dp"
         android:text="100"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/dark"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/custom_rectangle"
+        app:layout_constraintStart_toEndOf="@+id/iv_mycustom_star"
         app:layout_constraintTop_toTopOf="@+id/customName" />
 
     <TextView
@@ -109,6 +125,8 @@
         android:layout_marginEnd="10dp"
         android:text="\@heewoong_ahn"
         android:textColor="@color/dark"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textSize="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_mycustom_circle"
         app:layout_constraintEnd_toEndOf="@+id/custom_rectangle" />
