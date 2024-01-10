@@ -1,5 +1,6 @@
 package com.heewoong.brewstar
 
+import android.content.ContentValues
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,24 +15,31 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.heewoong.brewstar.databinding.ActivityViewCustomsBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.*
 
 class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding : ActivityViewCustomsBinding
     private lateinit var editText: EditText
-    private var searchList = ArrayList<customDummy>()
+    private var searchList = ArrayList<CustomItem>()
+    private var customList = ArrayList<CustomItem>()
     private lateinit var searchAdapter: viewCustomAdapter
-    private var itemList = ArrayList<customDummy>()
+//    private var itemList = ArrayList<customDummy>()
 
     private lateinit var categorySpinner: Spinner
     private lateinit var categorySpinner2: Spinner
     val categoryList = listOf("All", "Coffee", "Non Coffee", "Frappuccino")
     val categoryList2 = listOf("Recommend", "Recent")
-    private var selectedList = ArrayList<customDummy>()
+    private var selectedList = ArrayList<CustomItem>()
     var selectPosition: Int = 0
 
     // 스와이프 새로고침
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
+    val api = RetrofitInterface.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,28 +57,11 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
 
-//        val dummy = listOf(
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", 50),
-//            )
-        for ( i: Int in 1..10) {
-            itemList.add(customDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "heewoong_ahn", "50"))
-        }
+        getTab2()
+
 
 //        searchAdapter = viewCustomAdapter(this, dummy)
-        searchAdapter = viewCustomAdapter(this, itemList)
+        searchAdapter = viewCustomAdapter(this, customList)
         recyclerView.adapter = searchAdapter
 
 
@@ -108,6 +99,46 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         search()
     }
 
+    private fun getTab2() {
+        // data를 받아서, favoriteItemList에 add하면 됨.
+        api.getAllCustoms().enqueue(object : Callback<List<List<String>>> {
+            override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
+                if (response.isSuccessful) {
+                    Log.e(ContentValues.TAG, "네트워크 오류: dd")
+                    val result = response.body()
+                    result?.let{
+                        handleTab2(it)
+                    }
+                } else {
+                    // HTTP 요청이 실패한 경우의 처리
+                    Log.e(ContentValues.TAG, "HTTP 요청 실패: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<List<String>>>, t: Throwable) {
+                Log.e(ContentValues.TAG, "네트워크 오류: ${t.message}")
+            }
+        })
+    }
+    private fun handleTab2(data: List<List<String>>) {
+        for (record in data) {
+            val getId = record[0]
+            val getcategory = record[1]
+            val getname = record[2]
+            val getmenu = record[3]
+            val getcustom = record[4]
+            val getdescription = record[5]
+            val getcreator = record[6]
+            val getlikes = record[7]
+            //time은 backend에서 정렬해서 주기 때문에 받을 필요가 없음.
+
+
+            val customItem = CustomItem(getId, getcategory, getname, getmenu, getcustom, getdescription, getcreator, getlikes)
+            customList.add(customItem)
+            searchAdapter.notifyDataSetChanged()
+        }
+    }
+
     private fun search() {
         editText = binding.editSearch
         editText.addTextChangedListener(object: TextWatcher {
@@ -118,14 +149,14 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                 searchList.clear()
 
                 if(searchText.isEmpty()) {
-                    searchAdapter.setItems(itemList)
+                    searchAdapter.setItems(customList)
                 } else {
-                    for (a in itemList.indices) {
+                    for (a in customList.indices) {
                         // 나중에는 모든 name, menu..등등에 따라서 다 해야함
-                        if (itemList[a].name.toLowerCase().contains(searchText.toLowerCase())) {
-                            searchList.add(itemList[a])
-                        } else if (itemList[a].menu.toLowerCase().contains(searchText.toLowerCase())) {
-                            searchList.add(itemList[a])
+                        if (customList[a].name.toLowerCase().contains(searchText.toLowerCase())) {
+                            searchList.add(customList[a])
+                        } else if (customList[a].menu.toLowerCase().contains(searchText.toLowerCase())) {
+                            searchList.add(customList[a])
                         }
                     }
                     searchAdapter.setItems(searchList)
@@ -157,7 +188,7 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     searchAdapter.setItems(searchList)
                 } else if (selectedCategory == "All") {
                     Log.d("selected", "All")
-                    searchAdapter.setItems(itemList)
+                    searchAdapter.setItems(customList)
                 }
                 selectPosition = position
             }
@@ -171,7 +202,7 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onRefresh() {
         searchList.clear()
-        itemList.clear()
+        customList.clear()
         doingMain()
 
         categorySpinner.setSelection(selectPosition)
