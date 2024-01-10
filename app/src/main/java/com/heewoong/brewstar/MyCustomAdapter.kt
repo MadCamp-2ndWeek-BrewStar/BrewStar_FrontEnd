@@ -1,7 +1,9 @@
 package com.heewoong.brewstar
 
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +14,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.heewoong.brewstar.databinding.ActivityMyCustomAddBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Collections
 
 class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
         RecyclerView.Adapter<MyCustomAdapter.MyCustomViewHolder>() {
+
+    // 서버에서 불러오기
+    val api = RetrofitInterface.create()
+    // 토큰 아이디
+    private lateinit var tokenId: String
 
     override fun onCreateViewHolder( parent: ViewGroup, viewType: Int ): MyCustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.tab1_mycustom_recyclerview, parent, false)
@@ -25,6 +35,8 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
 
     override fun onBindViewHolder(holder: MyCustomViewHolder, position: Int) {
         holder.bind(myCustomItemList[position])
+        val sharedPref = holder.itemView.context.getSharedPreferences("getTokenId", Context.MODE_PRIVATE)
+        tokenId = sharedPref.getString("tokenId", "")!!
 
         // 수정 버튼을 누르면 수정 창으로 넘어가기
         // 여기서 데이터들 다 받아와서 list에 반영까지 다 하기
@@ -50,6 +62,7 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
 
             // activity의 각 요소들을 원래 data들로 채우는 과정
             val myCustomItemOne = myCustomItemList[position]
+            val oldCustomId: String = myCustomItemOne.customid
             val oldName: String = myCustomItemOne.name
             val oldMenu: String = myCustomItemOne.menu
             val oldCustom: String = myCustomItemOne.custom
@@ -101,11 +114,27 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
                 newDescription += view.findViewById<EditText>(R.id.editPopupDescription).text.toString()
 
                 alertDialog.dismiss()
+
+                // 그냥 edit 추가만 해주고, 새로고침 하면 수정이 될 것이다.
+                val call = api.editCustom(oldCustomId, newName, oldMenu, oldCategory, newCustom, newDescription)
+                call.enqueue(object: Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            Log.e("Lets go", "success!! good!!")
+                        } else {
+                            Log.e("Lets go", "what's wrong...")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.e("mad..nn", "so sad plz")
+                    }
+                })
                 
-                // 좋아요 수는 그대로 유지해야 함
-                myCustomItemList.add(MyCustomsItem(newName, oldMenu, newCustom, oldLikes, oldCategory, newDescription, oldCreator))
-                // 그리고 여기서 삭제?
-                removeMyCustomItem(position)
+//                // 좋아요 수는 그대로 유지해야 함
+//                myCustomItemList.add(MyCustomsItem(newName, oldMenu, newCustom, oldLikes, oldCategory, newDescription, oldCreator))
+//                // 그리고 여기서 삭제?
+//                removeMyCustomItem(position)
 
                 // 나중에 그냥, NewName, NewMenu, NewCustom, NewDescription만 post로 보내면 된다. 그리고 나서
                 // notifyDataSetChanged() 하면 되지 않을까.
@@ -130,6 +159,21 @@ class MyCustomAdapter(private var myCustomItemList: ArrayList<MyCustomsItem>) :
     // recyclerView 중 하나의 항목 삭제하는 함수
     fun removeMyCustomItem(position: Int) {
         // 아하 삭제 기능 구현해야 하는데. 슬라이드 해서 삭제하는 방식으로 가야겠다.
+        val wannaRemoveItemId = myCustomItemList[position].customid
+        val call = api.deleteCustom(wannaRemoveItemId)
+        call.enqueue(object: Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.e("Lets go", "success!! good!!")
+                } else {
+                    Log.e("Lets go", "what's wrong...")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("mad..nn", "so sad plz")
+            }
+        })
         myCustomItemList.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, itemCount)

@@ -7,6 +7,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -81,6 +83,8 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     // 토큰 아이디
     private lateinit var tokenId: String
+    // 유저
+    private var user: String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -376,6 +380,16 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         bindingPopup = ActivityMyCustomAddBinding.inflate(layoutInflater)
         val view: View = bindingPopup.layoutPopup
 
+        getTab1User() // tokenId로 nickname을 받아오는데 시간이 좀 걸림
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            Log.d("user제발", user)
+            view.findViewById<TextView>(R.id.popupMadeBy).setText(user)
+        }, 100)
+
+//        Log.d("user제발", user)
+//        view.findViewById<TextView>(R.id.popupMadeBy).setText(user)
+//
         builder.setView(view)
 
         val alertDialog: AlertDialog = builder.create()
@@ -385,14 +399,15 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             alertDialog.dismiss()
         }
 
+        var newCustomId: String = ""
         var newName: String = ""
         var newMenu: String = ""
         var newCustom: String = ""
         var newLikes: String = "0"
         var newCategory: String = "Coffee"
         var newDescription: String = ""
-        var newCreator: String = "안희웅"
-        var newCreatornum: String = "3259657340"
+        var newCreator: String = user
+        var newCreatornum: String = tokenId
 
         // save 버튼 누르면 추가되기
         view.findViewById<Button>(R.id.popupSaveBtn).setOnClickListener {
@@ -437,9 +452,9 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     Log.e("mad..nn", "so sad plz")
                 }
             })
-            
-            myCustomItemList.add(MyCustomsItem(newName, newMenu, newCustom, newLikes, newCategory, newDescription, newCreator))
-            myCustomAdapter.notifyDataSetChanged()
+//            add 되고 나서 새로고침하면 자동으로 추가될 것임
+//            myCustomItemList.add(MyCustomsItem(newName, newMenu, newCustom, newLikes, newCategory, newDescription, newCreator))
+//            myCustomAdapter.notifyDataSetChanged()
         }
 
         // 다이얼로그 형태 지우기
@@ -464,6 +479,15 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 myCustomAdapter.swapData(fromPos, toPos)
                 return true
             }
+
+//            override fun onMove(
+//                recyclerView: RecyclerView,
+//                viewHolder: RecyclerView.ViewHolder,
+//                target: RecyclerView.ViewHolder
+//            ): Boolean {
+//                // 그냥 스왑 안되게 바꿔보기
+//                return true
+//            }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 myCustomAdapter.removeMyCustomItem(viewHolder.layoutPosition)
@@ -545,6 +569,7 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
     private fun handleTab1Favorite(data: List<List<String>>) {
         for (record in data) {
+            val getCustomId = record[0]
             val getname = record[2]
             val getmenu = record[3]
             val getcustom = record[4]
@@ -556,7 +581,7 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 //            // favoriteItem 형식으로 변환
 //            val favoriteItem = FavoriteItem(getname, getcustom, getcategory)
-            val favoriteItem = MyCustomsItem(getname, getmenu, getcustom, getlikes, getcategory, getdescription, getcreator)
+            val favoriteItem = MyCustomsItem(getCustomId, getname, getmenu, getcustom, getlikes, getcategory, getdescription, getcreator)
             Log.d(ContentValues.TAG, "Added items to collectItemList: $favoriteItem")
             favoriteItemList.add(favoriteItem)
             Log.d(ContentValues.TAG, "Added items to collectItemList: $favoriteItemList")
@@ -589,6 +614,7 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
     private fun handleTab1MyCustoms(data: List<List<String>>) {
         for (record in data) {
+            val getCustomId = record[0]
             val getname = record[2]
             val getmenu = record[3]
             val getcustom = record[4]
@@ -599,13 +625,32 @@ class tab1 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Log.d("plz name", "$getname")
 
             // favoriteItem 형식으로 변환
-            val favoriteItem = FavoriteItem(getname, getcustom, getcategory)
-            val myCustomItem = MyCustomsItem(getname, getmenu, getcustom, getlikes, getcategory, getdescription, getcreator)
+            val myCustomItem = MyCustomsItem(getCustomId, getname, getmenu, getcustom, getlikes, getcategory, getdescription, getcreator)
             Log.d(ContentValues.TAG, "Added items to myCustomItemList: $myCustomItem")
             myCustomItemList.add(myCustomItem)
             Log.d(ContentValues.TAG, "Added items to collectItemList: $myCustomItemList")
             myCustomAdapter.notifyDataSetChanged()
         }
+    }
+
+    private fun getTab1User() {
+        // data를 받아서, myCustomItemList에 add하면 됨.
+        api.getNickname(tokenId!!).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    Log.e(ContentValues.TAG, "네트워크 오류: dd")
+                    val result = response.body()
+                    user = result.toString()
+                } else {
+                    // HTTP 요청이 실패한 경우의 처리
+                    Log.e(ContentValues.TAG, "HTTP 요청 실패: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e(ContentValues.TAG, "네트워크 오류: ${t.message}")
+            }
+        })
     }
 
 

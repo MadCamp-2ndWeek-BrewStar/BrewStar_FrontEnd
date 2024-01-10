@@ -18,11 +18,21 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.Constants.TAG
 import com.kakao.sdk.user.UserApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
+
+    // 토큰 아이디
+    private lateinit var userId: String
+    // 유저
+    private lateinit var userName: String
+    // 서버에서 불러오기
+    val api = RetrofitInterface.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +68,25 @@ class MainActivity : AppCompatActivity() {
                         Log.e(TAG, "사용자 정보 요청 실패 $error")
                     } else if (user != null) {
                         Log.e(TAG, "로그인 성공했냐? $user") // 이 부분은 이미 로그인 정보가 담겨있어서 버튼을 누르면 다시 로그인이 되었을 때 뜸
+
+                        // 사용자 정보 보내서 DB에 저장하기 (사용자토큰id & 닉네임(이름))
+                        userId = user.id.toString()
+                        userName = user.properties!!["nickname"].toString()
+                        val call = api.addUser(userId, userName)
+                        call.enqueue(object: Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                if (response.isSuccessful) {
+                                    Log.e("Lets go", "success!! good!!")
+                                } else {
+                                    Log.e("Lets go", "what's wrong...")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                Log.e("mad..nn", "so sad plz")
+                            }
+                        })
+
                         val intent = Intent(this, navigation::class.java)
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                         finish()
