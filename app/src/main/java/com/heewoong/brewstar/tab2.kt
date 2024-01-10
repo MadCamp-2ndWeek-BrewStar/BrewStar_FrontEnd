@@ -86,7 +86,7 @@ class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     // All customs 받아오기
     private fun getTab2() {
         // data를 받아서, favoriteItemList에 add하면 됨.
-        api.getAllCustoms().enqueue(object : Callback<List<List<String>>> {
+        api.getAllCustoms("Recommend").enqueue(object : Callback<List<List<String>>> {
             override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
                 if (response.isSuccessful) {
                     Log.e(ContentValues.TAG, "네트워크 오류: dd")
@@ -106,6 +106,8 @@ class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         })
     }
     private fun handleTab2(data: List<List<String>>) {
+        var cnt: Int  = 0
+
         for (record in data) {
             val getId = record[0]
             val getcategory = record[1]
@@ -121,6 +123,12 @@ class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val customItem = CustomItem(getId, getcategory, getname, getmenu, getcustom, getdescription, getcreator, getlikes)
             customItemList.add(customItem)
             topTenAdapter.notifyDataSetChanged()
+
+            cnt++
+
+            if (cnt>=10){
+                break;
+            }
         }
     }
 

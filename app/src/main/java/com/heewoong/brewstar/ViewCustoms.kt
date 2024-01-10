@@ -95,7 +95,7 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun getTab2() {
-        api.getAllCustoms().enqueue(object : Callback<List<List<String>>> {
+        api.getAllCustoms("Recommend").enqueue(object : Callback<List<List<String>>> {
             override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
                 if (response.isSuccessful) {
                     val result = response.body()
@@ -159,6 +159,7 @@ class ViewCustoms : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             }
         })
     }
+
 
     private fun chooseCategory() {
         categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

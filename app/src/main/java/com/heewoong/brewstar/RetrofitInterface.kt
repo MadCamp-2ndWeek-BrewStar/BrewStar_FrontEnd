@@ -29,7 +29,7 @@ interface RetrofitInterface {
     fun getMyCustom(@Query("userId") parameter: String): Call<List<List<String>>>
 
     @GET("/allCustoms")
-    fun getAllCustoms(): Call<List<List<String>>>
+    fun getAllCustoms(@Query("sortFlag") parameter: String): Call<List<List<String>>>
 
     @GET("/getNickname")
     fun getNickname(@Query("tokenId") parameter: String): Call<String>
