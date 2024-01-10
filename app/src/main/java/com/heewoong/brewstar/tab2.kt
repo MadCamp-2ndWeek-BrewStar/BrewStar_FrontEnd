@@ -1,8 +1,10 @@
 package com.heewoong.brewstar
 
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,16 +13,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.heewoong.brewstar.databinding.FragmentTab2Binding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.ArrayList
 
 
 class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var binding: FragmentTab2Binding
     private lateinit var recyclerView: RecyclerView
-    private var itemList = ArrayList<topTenDummy>()
+//    private var itemList = ArrayList<topTenDummy>()
 
+    private lateinit var topTenAdapter: topTenAdapter
+    private var customItemList = ArrayList<CustomItem>()
     // 스와이프 새로고침
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
+    val api = RetrofitInterface.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,25 +56,13 @@ class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-//        val dummy = listOf(
-//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
-//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
-//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
-//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
-//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
-//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
-//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
-//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
-//            topTenDummy("레몬 아샷추", "~~~~~~~~~~~", "heewoong_ahn", 50),
-//
-//                )
+        getTab2()
 
-        for ( i: Int in 1..10) {
-            itemList.add(topTenDummy("레몬 아샷추","Iced Caffe Latte", "~~~~~~~~~~~~~~~~~~", "50"))
-        }
+        topTenAdapter = topTenAdapter(requireContext(), customItemList)
+
 
         //recyclerView.adapter = topTenAdapter(requireContext(), dummy)
-        recyclerView.adapter = topTenAdapter(requireContext(), itemList)
+        recyclerView.adapter = topTenAdapter
 
         binding.coffeeCard.setOnClickListener{
             // 여기서, @GET("/Coffee) 불러와야.
@@ -86,8 +84,50 @@ class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
+    // favorite 누른 애들
+    private fun getTab2() {
+        // data를 받아서, favoriteItemList에 add하면 됨.
+        api.getAllCustoms().enqueue(object : Callback<List<List<String>>> {
+            override fun onResponse(call: Call<List<List<String>>>, response: Response<List<List<String>>>) {
+                if (response.isSuccessful) {
+                    Log.e(ContentValues.TAG, "네트워크 오류: dd")
+                    val result = response.body()
+                    result?.let{
+                        handleTab2(it)
+                    }
+                } else {
+                    // HTTP 요청이 실패한 경우의 처리
+                    Log.e(ContentValues.TAG, "HTTP 요청 실패: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<List<String>>>, t: Throwable) {
+                Log.e(ContentValues.TAG, "네트워크 오류: ${t.message}")
+            }
+        })
+    }
+    private fun handleTab2(data: List<List<String>>) {
+        for (record in data) {
+            val getId = record[0]
+            val getcategory = record[1]
+            val getname = record[2]
+            val getmenu = record[3]
+            val getcustom = record[4]
+            val getdescription = record[5]
+            val getcreator = record[6]
+            val getlikes = record[7]
+            //time은 backend에서 정렬해서 주기 때문에 받을 필요가 없음.
+
+
+            val customItem = CustomItem(getId, getcategory, getname, getmenu, getcustom, getdescription, getcreator, getlikes)
+            customItemList.add(customItem)
+            topTenAdapter.notifyDataSetChanged()
+        }
+    }
+
+
     override fun onRefresh() {
-        itemList.clear()
+        customItemList.clear()
         doingMain()
         swipeRefreshLayout.isRefreshing = false
     }

@@ -1,6 +1,6 @@
 package com.heewoong.brewstar
 
-data class CustomItem (val name: String, val menu: String, val category: String, val custom: String, val description: String, val creator: String, val likes: String, val wish: String)
+data class CustomItem (val id: String, val category: String, val name: String, val menu: String,  val custom: String, val description: String, val creator: String, val likes: String)
 
 // name: 레몬 아샷추 -> 사용자가 만든 이름
 // menu: Iced Caffe Americano -> 실제 메뉴 이름
