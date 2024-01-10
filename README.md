@@ -80,12 +80,12 @@
 - SwipeRefreshLayout을 통해 스와이프하면 새로고침을 할 수 있습니다.
 - 각 항목은 모두 recyclerView로 구현하였습니다.
 
----
+
 
 ## 📁 Resources
 - APK file : https://drive.google.com/file/d/1J1PQ0fvIpA3LQc9COHur7n9mD5tEZmQB/view?usp=sharing
 
----
+
 
 ## 수정/보완해야 할 점
 - ViewCustoms.kt 이해하고 Recommend Recent 별 sorting 추가하기. 
