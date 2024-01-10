@@ -3,6 +3,8 @@
 
 # BrewStar - FrontEnd
 
+📌 BackEnd와 관련된 내용은 https://github.com/MadCamp-2ndWeek-BrewStar/BrewStar_FrontEnd ‼️
+
 ### 👥 Developers
 - 안희웅: 고려대학교 컴퓨터학과 19학번
 - 송한이: KAIST 전산학부 21학번
