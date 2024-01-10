@@ -21,6 +21,7 @@
 ---
 
 ### 📱 MainActivity
+![MainActivity](https://github.com/MadCamp-2ndWeek-BrewStar/BrewStar_FrontEnd/assets/112535704/1e6d4c5c-1ac2-428f-b74d-08bb938b8f16)
 ***Main Features***
 - 심플한 스플레시 화면을 만들었습니다.
 - "Start By Using KakaoTalk"을 눌러 카카오톡으로 로그인합니다.
@@ -35,7 +36,7 @@
 ---
 
 ### ✌️ TAP1: My Page
-![전화번호부](https://github.com/sunohkim/Madcamp_AndroidApp/assets/112535704/ccade6b6-da92-4740-b9a2-e47c0c888a58)
+![Tab1](https://github.com/MadCamp-2ndWeek-BrewStar/BrewStar_FrontEnd/assets/112535704/63a67328-1d2c-443b-a955-e1dd5fd73553)
 ***Main Features***
 - Favorite Customs 부분에는 "좋아요"를 누른 item들만 뜨도록 했습니다.
   화면 오른쪽의 스위치가 꺼져 있으면 세 개의 종류별로 분류를 해두었고, 각 카테고리를 클릭하면 카테고리 별로 "좋아요"를 누른 item들을 볼 수 있습니다.
@@ -59,7 +60,7 @@
 ---
 
 ### 🤩 TAP2: All Customs
-![갤러리](https://github.com/sunohkim/Madcamp_AndroidApp/assets/112535704/ee1bc291-7408-4d5a-9a8b-df6b28034848)
+![Tab2](https://github.com/MadCamp-2ndWeek-BrewStar/BrewStar_FrontEnd/assets/112535704/fb4de4d5-9e67-4372-bf7d-10e98e932c0a)
 ***Main Features***
 - Category별로 나누어서, Coffee, Non-Coffee, Frappuccino 별로 나누어 custom한 item들을 볼 수 있습니다.
   각 Category를 누르면, 새로운 Activity가 뜨면서 item들이 나열됩니다.
