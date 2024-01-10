@@ -73,7 +73,7 @@ class tab2 : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         binding.nonCoffeeCard.setOnClickListener{
             // 여기서, @GET("/Non-Coffee) 불러와야.
             val intent = Intent(requireContext(), ViewCustoms::class.java)
-            intent.putExtra("selected", "Non Coffee")
+            intent.putExtra("selected", "Non-Coffee")
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
         binding.frappuccinoCard.setOnClickListener{
